@@ -1,0 +1,164 @@
+.admin-profile-menu {
+  position: relative;
+  display: inline-block;
+}
+
+/* Menu Item Styles */
+.menu-item {
+  padding: 12px 16px !important;
+  transition: all 0.2s ease !important;
+}
+
+.menu-item:hover {
+  background-color: rgba(74, 108, 247, 0.08) !important;
+}
+
+.menu-item .MuiListItemIcon-root {
+  min-width: 40px !important;
+  color: #4a6cf7;
+}
+
+.menu-item .MuiListItemText-primary {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2d3748;
+}
+
+/* Logout Button Special Styling */
+.menu-item.logout {
+  color: #e53e3e !important;
+}
+
+.menu-item.logout .MuiListItemIcon-root {
+  color: #e53e3e !important;
+}
+
+.menu-item.logout:hover {
+  background-color: rgba(229, 62, 62, 0.08) !important;
+}
+
+/* Dialog Animations */
+.MuiDialog-root {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 600px) {
+  .menu-item {
+    padding: 10px 14px !important;
+  }
+
+  .menu-item .MuiListItemText-primary {
+    font-size: 0.8rem;
+  }
+
+  .MuiDialog-paper {
+    margin: 16px !important;
+  }
+}
+
+/* Avatar Hover Effect */
+.admin-profile-menu .MuiAvatar-root {
+  transition: all 0.3s ease;
+}
+
+.admin-profile-menu .MuiIconButton-root:hover .MuiAvatar-root {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.2);
+}
+
+/* Menu Paper Animation */
+.MuiMenu-paper {
+  animation: slideDown 0.2s ease !important;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dialog Content Scrollbar */
+.MuiDialogContent-root {
+  scrollbar-width: thin;
+  scrollbar-color: #4a6cf7 #f0f0f0;
+}
+
+.MuiDialogContent-root::-webkit-scrollbar {
+  width: 6px;
+}
+
+.MuiDialogContent-root::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.MuiDialogContent-root::-webkit-scrollbar-thumb {
+  background-color: #4a6cf7;
+  border-radius: 3px;
+}
+
+/* Form Field Focus Effects */
+.MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #4a6cf7;
+  border-width: 2px;
+}
+
+.MuiTextField-root .MuiInputLabel-root.Mui-focused {
+  color: #4a6cf7;
+}
+
+/* Button Hover Effects */
+.MuiButton-contained {
+  transition: all 0.3s ease !important;
+}
+
+.MuiButton-contained:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(74, 108, 247, 0.3) !important;
+}
+
+.MuiButton-outlined:hover {
+  background-color: rgba(74, 108, 247, 0.08) !important;
+}
+
+/* Profile Header Animation */
+.MuiDialogTitle-root {
+  position: relative;
+  overflow: hidden;
+}
+
+.MuiDialogTitle-root::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+} 
