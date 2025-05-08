@@ -25,6 +25,10 @@ import {
   LinearProgress,
   Snackbar,
   Alert,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -36,7 +40,7 @@ import { format } from 'date-fns';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { projectApi } from '../../../services/api';
+import { projectApi, userApi } from '../../../services/api';
 
 const ProjectsSection = () => {
   const [projects, setProjects] = useState([]);
@@ -51,8 +55,11 @@ const ProjectsSection = () => {
     endDate: new Date(),
     description: '',
     progress: 0,
-    status: 'Active'
+    status: 'To Do',
+    assignedTo: ''
   });
+  
+  const [users, setUsers] = useState([]);
   
   const theme = useTheme();
   const navigate = useNavigate();
@@ -60,6 +67,11 @@ const ProjectsSection = () => {
   // Fetch projects when component mounts
   useEffect(() => {
     fetchProjects();
+  }, []);
+
+  // Fetch users when component mounts
+  useEffect(() => {
+    fetchUsers();
   }, []);
 
   const fetchProjects = async () => {
@@ -85,6 +97,23 @@ const ProjectsSection = () => {
       setProjects([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const usersResponse = await userApi.getAllUsers();
+      console.log('Fetched users:', usersResponse);
+      if (usersResponse.success && usersResponse.users) {
+        setUsers(usersResponse.users);
+      } else if (Array.isArray(usersResponse)) {
+        setUsers(usersResponse);
+      } else {
+        setUsers([]);
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      setUsers([]);
     }
   };
 
@@ -180,7 +209,8 @@ const ProjectsSection = () => {
           endDate: new Date(),
           description: '',
           progress: 0,
-          status: 'Active'
+          status: 'To Do',
+          assignedTo: ''
         });
         
         // Show success message
@@ -245,6 +275,7 @@ const ProjectsSection = () => {
               <TableCell sx={{ fontWeight: 600 }}>Start Date</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>End Date</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Assigned To</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -290,12 +321,21 @@ const ProjectsSection = () => {
                 <TableCell>
                   <Chip
                     label={project.status}
-                    color={project.status === 'Active' ? 'primary' : 'success'}
+                    color={
+                      project.status === 'Done' 
+                        ? 'success' 
+                        : project.status === 'In Progress' 
+                        ? 'primary' 
+                        : 'warning'
+                    }
                     size="small"
                     sx={{
                       fontWeight: 500,
                     }}
                   />
+                </TableCell>
+                <TableCell>
+                  {project.assignedTo ? users.find(user => user._id === project.assignedTo)?.name || 'Not Found' : 'Unassigned'}
                 </TableCell>
                 <TableCell>
                   <Stack direction="row" spacing={1}>
@@ -357,6 +397,35 @@ const ProjectsSection = () => {
               value={editProject?.description || ''}
               onChange={(e) => setEditProject({ ...editProject, description: e.target.value })}
             />
+            <FormControl fullWidth>
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={editProject?.status || ''}
+                label="Status"
+                onChange={(e) => setEditProject({ ...editProject, status: e.target.value })}
+              >
+                <MenuItem value="To Do">To Do</MenuItem>
+                <MenuItem value="In Progress">In Progress</MenuItem>
+                <MenuItem value="Done">Done</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <InputLabel>Assigned To</InputLabel>
+              <Select
+                value={editProject?.assignedTo || ''}
+                label="Assigned To"
+                onChange={(e) => setEditProject({ ...editProject, assignedTo: e.target.value })}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {users.map((user) => (
+                  <MenuItem key={user._id} value={user._id}>
+                    {user.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
               fullWidth
               type="number"
@@ -420,6 +489,35 @@ const ProjectsSection = () => {
               value={newProject.description}
               onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
             />
+            <FormControl fullWidth>
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={newProject.status}
+                label="Status"
+                onChange={(e) => setNewProject({ ...newProject, status: e.target.value })}
+              >
+                <MenuItem value="To Do">To Do</MenuItem>
+                <MenuItem value="In Progress">In Progress</MenuItem>
+                <MenuItem value="Done">Done</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <InputLabel>Assigned To</InputLabel>
+              <Select
+                value={newProject.assignedTo}
+                label="Assigned To"
+                onChange={(e) => setNewProject({ ...newProject, assignedTo: e.target.value })}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {users.map((user) => (
+                  <MenuItem key={user._id} value={user._id}>
+                    {user.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
               fullWidth
               type="number"

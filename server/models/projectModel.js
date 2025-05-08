@@ -6,7 +6,11 @@ const projectSchema = new mongoose.Schema({
   startDate: { type: Date },
   endDate: { type: Date },
   progress: { type: Number, default: 0 },
-  status: { type: String, enum: ['Active', 'Completed'], default: 'Active' },
+  status: { type: String, enum: ['To Do', 'In Progress', 'Done'], default: 'To Do' },
+  assignedTo: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User'
+  },
   createdBy: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User'

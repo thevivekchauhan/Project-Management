@@ -226,4 +226,30 @@ export const recentTaskApi = {
   }
 };
 
+export const userApi = {
+  getAllUsers: async () => {
+    try {
+      console.log('Fetching all users...');
+      const response = await api.get('/users');
+      console.log('Users response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching users:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+
+  getUserById: async (id) => {
+    try {
+      console.log('Fetching user:', id);
+      const response = await api.get(`/users/${id}`);
+      console.log('User response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+};
+
 export default api;

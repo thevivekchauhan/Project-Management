@@ -27,6 +27,10 @@ import {
   Alert,
   Grid,
   useMediaQuery,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -34,12 +38,13 @@ import {
   Delete,
   Visibility,
   CalendarToday,
+  Person,
 } from '@mui/icons-material';
 import { format } from 'date-fns';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { projectApi } from '../../../services/api';
+import { projectApi, userApi } from '../../../services/api';
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -47,6 +52,7 @@ const Projects = () => {
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [editProject, setEditProject] = useState(null);
+  const [users, setUsers] = useState([]);
   
   const theme = useTheme();
   const navigate = useNavigate();
@@ -56,7 +62,25 @@ const Projects = () => {
   // Fetch projects when component mounts
   useEffect(() => {
     fetchProjects();
+    fetchUsers();
   }, []);
+  
+  const fetchUsers = async () => {
+    try {
+      const usersResponse = await userApi.getAllUsers();
+      console.log('Fetched users:', usersResponse);
+      if (usersResponse.success && usersResponse.users) {
+        setUsers(usersResponse.users);
+      } else if (Array.isArray(usersResponse)) {
+        setUsers(usersResponse);
+      } else {
+        setUsers([]);
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      setUsers([]);
+    }
+  };
 
   const fetchProjects = async () => {
     try {
@@ -176,6 +200,14 @@ const Projects = () => {
               Due: {format(new Date(project.endDate), 'MMM dd, yyyy')}
             </Typography>
           </Box>
+          {project.assignedTo && (
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+              <Person sx={{ fontSize: 16, color: 'text.secondary', mr: 1 }} />
+              <Typography variant="body2" color="text.secondary">
+                Assigned To: {users.find(user => user._id === project.assignedTo)?.name || 'Not Found'}
+              </Typography>
+            </Box>
+          )}
         </Box>
 
         <Box sx={{ mb: 2 }}>
@@ -210,7 +242,13 @@ const Projects = () => {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Chip
             label={project.status}
-            color={project.status === 'Completed' ? 'success' : 'primary'}
+            color={
+              project.status === 'Done' 
+                ? 'success' 
+                : project.status === 'In Progress' 
+                ? 'primary' 
+                : 'warning'
+            }
             size="small"
             sx={{
               fontWeight: 500,
@@ -258,6 +296,7 @@ const Projects = () => {
             <TableCell sx={{ fontWeight: 600 }}>Start Date</TableCell>
             <TableCell sx={{ fontWeight: 600 }}>End Date</TableCell>
             <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
+            <TableCell sx={{ fontWeight: 600 }}>Assigned To</TableCell>
             <TableCell sx={{ fontWeight: 600 }}>Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -303,12 +342,21 @@ const Projects = () => {
               <TableCell>
                 <Chip
                   label={project.status}
-                  color={project.status === 'Completed' ? 'success' : 'primary'}
+                  color={
+                    project.status === 'Done' 
+                      ? 'success' 
+                      : project.status === 'In Progress' 
+                      ? 'primary' 
+                      : 'warning'
+                  }
                   size="small"
                   sx={{
                     fontWeight: 500,
                   }}
                 />
+              </TableCell>
+              <TableCell>
+                {project.assignedTo ? users.find(user => user._id === project.assignedTo)?.name || 'Not Found' : 'Unassigned'}
               </TableCell>
               <TableCell>
                 <Stack direction="row" spacing={1}>
@@ -400,6 +448,18 @@ const Projects = () => {
               value={editProject?.description || ''}
               onChange={(e) => setEditProject({ ...editProject, description: e.target.value })}
             />
+            <FormControl fullWidth>
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={editProject?.status || ''}
+                label="Status"
+                onChange={(e) => setEditProject({ ...editProject, status: e.target.value })}
+              >
+                <MenuItem value="To Do">To Do</MenuItem>
+                <MenuItem value="In Progress">In Progress</MenuItem>
+                <MenuItem value="Done">Done</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               fullWidth
               type="number"
@@ -408,19 +468,6 @@ const Projects = () => {
               onChange={(e) => setEditProject({ ...editProject, progress: Number(e.target.value) })}
               inputProps={{ min: 0, max: 100 }}
             />
-            <TextField
-              select
-              fullWidth
-              label="Status"
-              value={editProject?.status || 'Active'}
-              onChange={(e) => setEditProject({ ...editProject, status: e.target.value })}
-              SelectProps={{
-                native: true,
-              }}
-            >
-              <option value="Active">Active</option>
-              <option value="Completed">Completed</option>
-            </TextField>
           </Stack>
         </DialogContent>
         <DialogActions>
