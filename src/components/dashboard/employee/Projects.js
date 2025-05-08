@@ -46,6 +46,7 @@ const Projects = () => {
   const [viewMode, setViewMode] = useState('card'); // 'card' or 'table'
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [editProject, setEditProject] = useState(null);
   
   const theme = useTheme();
   const navigate = useNavigate();
@@ -95,6 +96,38 @@ const Projects = () => {
         severity: 'error'
       });
       setProjects([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditProject = (project) => {
+    setEditProject(project);
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      setLoading(true);
+      await projectApi.updateProject(editProject._id, editProject);
+      
+      // Update the local state to reflect changes immediately
+      setProjects(projects.map(project => 
+        project._id === editProject._id ? editProject : project
+      ));
+      
+      setEditProject(null);
+      setSnackbar({
+        open: true,
+        message: 'Project updated successfully',
+        severity: 'success'
+      });
+    } catch (error) {
+      console.error('Error updating project:', error);
+      setSnackbar({
+        open: true,
+        message: 'Failed to update project',
+        severity: 'error'
+      });
     } finally {
       setLoading(false);
     }
@@ -183,14 +216,25 @@ const Projects = () => {
               fontWeight: 500,
             }}
           />
-          <Button
-            size="small"
-            endIcon={<Visibility />}
-            onClick={() => navigate(`/employee/projects/${project._id}`)}
-            color="primary"
-          >
-            View Details
-          </Button>
+          <Box>
+            <Button
+              size="small"
+              endIcon={<Visibility />}
+              onClick={() => navigate(`/employee/projects/${project._id}`)}
+              color="primary"
+              sx={{ mr: 1 }}
+            >
+              View Details
+            </Button>
+            <Button
+              size="small"
+              endIcon={<Edit />}
+              onClick={() => handleEditProject(project)}
+              color="secondary"
+            >
+              Edit
+            </Button>
+          </Box>
         </Box>
       </Paper>
     </motion.div>
@@ -276,15 +320,26 @@ const Projects = () => {
                 />
               </TableCell>
               <TableCell>
-                <Tooltip title="View Details">
-                  <IconButton
-                    size="small"
-                    onClick={() => navigate(`/employee/projects/${project._id}`)}
-                    sx={{ color: theme.palette.info.main }}
-                  >
-                    <Visibility fontSize="small" />
-                  </IconButton>
-                </Tooltip>
+                <Stack direction="row" spacing={1}>
+                  <Tooltip title="View Details">
+                    <IconButton
+                      size="small"
+                      onClick={() => navigate(`/employee/projects/${project._id}`)}
+                      sx={{ color: theme.palette.info.main }}
+                    >
+                      <Visibility fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Edit Project">
+                    <IconButton
+                      size="small"
+                      onClick={() => handleEditProject(project)}
+                      sx={{ color: theme.palette.warning.main }}
+                    >
+                      <Edit fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
               </TableCell>
             </TableRow>
           ))}
@@ -331,6 +386,66 @@ const Projects = () => {
 
         {viewMode === 'card' ? renderCardView() : renderTableView()}
       </motion.div>
+
+      {/* Edit Project Dialog */}
+      <Dialog open={!!editProject} onClose={() => setEditProject(null)} maxWidth="sm" fullWidth>
+        <DialogTitle>Edit Project</DialogTitle>
+        <DialogContent>
+          <Stack spacing={3} sx={{ mt: 2 }}>
+            <TextField
+              fullWidth
+              label="Project Name"
+              value={editProject?.name || ''}
+              onChange={(e) => setEditProject({ ...editProject, name: e.target.value })}
+            />
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="Start Date"
+                value={editProject?.startDate || null}
+                onChange={(date) => setEditProject({ ...editProject, startDate: date })}
+              />
+              <DatePicker
+                label="End Date"
+                value={editProject?.endDate || null}
+                onChange={(date) => setEditProject({ ...editProject, endDate: date })}
+              />
+            </LocalizationProvider>
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
+              label="Description"
+              value={editProject?.description || ''}
+              onChange={(e) => setEditProject({ ...editProject, description: e.target.value })}
+            />
+            <TextField
+              fullWidth
+              type="number"
+              label="Progress"
+              value={editProject?.progress || 0}
+              onChange={(e) => setEditProject({ ...editProject, progress: Number(e.target.value) })}
+              inputProps={{ min: 0, max: 100 }}
+            />
+            <TextField
+              select
+              fullWidth
+              label="Status"
+              value={editProject?.status || 'Active'}
+              onChange={(e) => setEditProject({ ...editProject, status: e.target.value })}
+              SelectProps={{
+                native: true,
+              }}
+            >
+              <option value="Active">Active</option>
+              <option value="Completed">Completed</option>
+            </TextField>
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditProject(null)}>Cancel</Button>
+          <Button onClick={handleSaveEdit} variant="contained">Save Changes</Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Snackbar for notifications */}
       <Snackbar 
