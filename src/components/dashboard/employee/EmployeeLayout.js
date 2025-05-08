@@ -132,7 +132,7 @@ const EmployeeLayout = () => {
   const { user } = useSelector((state) => state.auth);
 
   const menuItems = [
-    { text: 'Overview', icon: <DashboardIcon />, path: '/employee' },
+    { text: 'Home', icon: <DashboardIcon />, path: '/employee' },
     { text: 'My Projects', icon: <AssignmentIcon />, path: '/employee/projects' },
     { text: 'Messages', icon: <MessageIcon />, path: '/employee/messages' },
     { text: 'Settings', icon: <SettingsIcon />, path: '/employee/settings' },

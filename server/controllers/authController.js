@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const { logActivity } = require('./activityController');
 
 const generateToken = (user) => {
   return jwt.sign(
@@ -33,6 +34,17 @@ exports.register = async (req, res) => {
     });
 
     await user.save();
+
+    // Log the registration activity
+    await logActivity(
+      req,
+      user,
+      'create',
+      'user',
+      user._id,
+      `New ${role} registered: ${firstName} ${lastName}`,
+      { after: { firstName, lastName, email, role } }
+    );
 
     // Generate token
     const token = generateToken(user);
@@ -72,6 +84,16 @@ exports.login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
+
+    // Log the login activity
+    await logActivity(
+      req,
+      user,
+      'login',
+      'user',
+      user._id,
+      `User logged in: ${user.firstName} ${user.lastName}`
+    );
 
     // Generate token
     const token = generateToken(user);

@@ -1,230 +1,299 @@
-import { useState } from 'react';
+// import { useState } from 'react';
+// import { motion } from 'framer-motion';
+// import {
+//   Box,
+//   Grid,
+//   Paper,
+//   Typography,
+//   Chip,
+//   Button,
+//   Avatar,
+//   AvatarGroup,
+//   LinearProgress,
+//   useTheme,
+//   useMediaQuery,
+//   IconButton,
+// } from '@mui/material';
+// import {
+//   Add as AddIcon,
+//   CalendarToday,
+//   Group,
+//   ArrowForward,
+//   Star,
+//   StarBorder,
+// } from '@mui/icons-material';
+
+// const Projects = () => {
+//   const theme = useTheme();
+//   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+//   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+
+//   const [projects, setProjects] = useState([
+//     // {
+//     //   id: 1,
+//     //   title: 'Website Redesign',
+//     //   description: 'Complete overhaul of the company website with modern design and improved UX',
+//     //   progress: 75,
+//     //   deadline: '2024-06-15',
+//     //   team: ['JD', 'AB', 'CD', 'EF'],
+//     //   status: 'In Progress',
+//     //   priority: 'High',
+//     //   tasks: { total: 24, completed: 18 },
+//     // },
+//     // {
+//     //   id: 2,
+//     //   title: 'Mobile App Development',
+//     //   description: 'Development of a new mobile application for iOS and Android platforms',
+//     //   progress: 45,
+//     //   deadline: '2024-07-30',
+//     //   team: ['JD', 'GH', 'IJ'],
+//     //   status: 'In Progress',
+//     //   priority: 'Medium',
+//     //   tasks: { total: 36, completed: 16 },
+//     // },
+//     // {
+//     //   id: 3,
+//     //   title: 'Database Migration',
+//     //   description: 'Migration of legacy database to new cloud-based solution',
+//     //   progress: 90,
+//     //   deadline: '2024-05-20',
+//     //   team: ['JD', 'KL', 'MN'],
+//     //   status: 'Almost Done',
+//     //   priority: 'High',
+//     //   tasks: { total: 12, completed: 11 },
+//     // },
+//   ]);
+
+//   const ProjectCard = ({ project }) => (
+//     <motion.div
+//       initial={{ opacity: 0, y: 20 }}
+//       animate={{ opacity: 1, y: 0 }}
+//       transition={{ duration: 0.3 }}
+//     >
+//       <Paper
+//         elevation={0}
+//         sx={{
+//           p: 3,
+//           height: '100%',
+//           borderRadius: 2,
+//           border: '1px solid',
+//           borderColor: 'divider',
+//           '&:hover': {
+//             boxShadow: 2,
+//           },
+//         }}
+//       >
+//         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+//           <Box>
+//             <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+//               {project.title}
+//             </Typography>
+//             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+//               {project.description}
+//             </Typography>
+//           </Box>
+//           <IconButton size="small">
+//             <StarBorder />
+//           </IconButton>
+//         </Box>
+
+//         <Box sx={{ mb: 2 }}>
+//           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+//             <CalendarToday sx={{ fontSize: 16, color: 'text.secondary', mr: 1 }} />
+//             <Typography variant="body2" color="text.secondary">
+//               Due: {project.deadline}
+//             </Typography>
+//           </Box>
+//           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+//             <Group sx={{ fontSize: 16, color: 'text.secondary', mr: 1 }} />
+//             <AvatarGroup max={4} sx={{ '& .MuiAvatar-root': { width: 24, height: 24, fontSize: '0.75rem' } }}>
+//               {project.team.map((member, index) => (
+//                 <Avatar key={index} sx={{ bgcolor: theme.palette.primary.main }}>
+//                   {member}
+//                 </Avatar>
+//               ))}
+//             </AvatarGroup>
+//           </Box>
+//         </Box>
+
+//         <Box sx={{ mb: 2 }}>
+//           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+//             <Typography variant="body2" color="text.secondary">
+//               Progress
+//             </Typography>
+//             <Typography variant="body2" color="text.secondary">
+//               {project.progress}%
+//             </Typography>
+//           </Box>
+//           <LinearProgress
+//             variant="determinate"
+//             value={project.progress}
+//             sx={{
+//               height: 6,
+//               borderRadius: 3,
+//               bgcolor: `${theme.palette.primary.main}15`,
+//               '& .MuiLinearProgress-bar': {
+//                 borderRadius: 3,
+//               },
+//             }}
+//           />
+//         </Box>
+
+//         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+//           <Box>
+//             <Chip
+//               label={project.status}
+//               size="small"
+//               color={project.status === 'Almost Done' ? 'success' : 'primary'}
+//               sx={{ mr: 1 }}
+//             />
+//             <Chip
+//               label={project.priority}
+//               size="small"
+//               color={project.priority === 'High' ? 'error' : 'warning'}
+//             />
+//           </Box>
+//           <Button
+//             size="small"
+//             endIcon={<ArrowForward />}
+//             color="primary"
+//           >
+//             View Details
+//           </Button>
+//         </Box>
+//       </Paper>
+//     </motion.div>
+//   );
+
+//   return (
+//     <Box sx={{ p: isMobile ? 1 : 3 }}>
+//       <motion.div
+//         initial={{ opacity: 0, y: 20 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         transition={{ duration: 0.5 }}
+//       >
+//         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+//           <Box>
+//             <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+//               My Projects
+//             </Typography>
+//             <Typography variant="body1" color="text.secondary">
+//               Track and manage your ongoing projects
+//             </Typography>
+//           </Box>
+//           {/* <Button
+//             variant="contained"
+//             startIcon={<AddIcon />}
+//             sx={{
+//               borderRadius: 2,
+//               textTransform: 'none',
+//               px: 3,
+//             }}
+//           >
+//             New Project
+//           </Button> */}
+//         </Box>
+
+//         <Grid container spacing={3}>
+//           {projects.map((project) => (
+//             <Grid item xs={12} md={6} lg={4} key={project.id}>
+//               <ProjectCard project={project} />
+//             </Grid>
+//           ))}
+//         </Grid>
+//       </motion.div>
+//     </Box>
+//   );
+// };
+
+// export default Projects; 
+
+
+
+
+
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Box,
   Grid,
   Paper,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Chip,
-  IconButton,
   useTheme,
   useMediaQuery,
-  LinearProgress,
-  Avatar,
-  AvatarGroup,
-  Button,
 } from '@mui/material';
 import {
-  Assignment,
-  CheckCircle,
-  Pending,
-  Warning,
-  Comment,
-  Add as AddIcon,
-  TrendingUp,
-  CalendarToday,
-  Group,
-  ArrowForward,
-  Message,
+  AccessTime,
+  DateRange,
 } from '@mui/icons-material';
 
 const Dashboard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [stats] = useState({
-    tasks: {
-      total: 24,
-      completed: 18,
-      inProgress: 4,
-      pending: 2,
-    },
-    projects: {
-      active: 3,
-      completed: 5,
-      upcoming: 2,
-    },
-    messages: {
-      unread: 5,
-      total: 28,
-    },
-  });
+  const [currentTime, setCurrentTime] = useState(new Date());
 
-  const [recentTasks, setRecentTasks] = useState([
-    {
-      id: 1,
-      title: 'Update user documentation',
-      status: 'completed',
-      deadline: '2024-05-01',
-      project: 'Website Redesign',
-      progress: 100,
-    },
-    {
-      id: 2,
-      title: 'Implement new feature',
-      status: 'pending',
-      deadline: '2024-05-05',
-      project: 'Mobile App',
-      progress: 60,
-    },
-    {
-      id: 3,
-      title: 'Bug fixes for login page',
-      status: 'overdue',
-      deadline: '2024-04-28',
-      project: 'Website Redesign',
-      progress: 30,
-    },
-  ]);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
 
-  const StatCard = ({ title, value, icon, color }) => (
-    <Paper
-      elevation={0}
-      sx={{
-        p: 3,
-        height: '100%',
-        borderRadius: 2,
-        border: '1px solid',
-        borderColor: 'divider',
-        '&:hover': {
-          boxShadow: 2,
-        },
-      }}
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-        <Box
-          sx={{
-            width: 48,
-            height: 48,
-            borderRadius: 2,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            bgcolor: `${color}15`,
-            color: color,
-            mr: 2,
-          }}
-        >
-          {icon}
-        </Box>
-        <Box>
-          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-            {value}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {title}
-          </Typography>
-        </Box>
-      </Box>
-    </Paper>
-  );
-
-  const TaskItem = ({ task }) => {
-    const getStatusColor = (status) => {
-      switch (status) {
-        case 'completed':
-          return 'success';
-        case 'pending':
-          return 'warning';
-        case 'overdue':
-          return 'error';
-        default:
-          return 'default';
-      }
+    return () => {
+      clearInterval(timer);
     };
+  }, []);
 
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <Paper
-          elevation={0}
-          sx={{
-            mb: 2,
-            p: 2,
-            borderRadius: 2,
-            border: '1px solid',
-            borderColor: 'divider',
-            '&:hover': {
-              boxShadow: 2,
-            },
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <Avatar
-              sx={{
-                width: 40,
-                height: 40,
-                bgcolor: `${theme.palette.primary.main}15`,
-                color: 'primary.main',
-                mr: 2,
-              }}
-            >
-              <Assignment />
-            </Avatar>
-            <Box sx={{ flexGrow: 1 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                {task.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {task.project}
-              </Typography>
-            </Box>
-            <Chip
-              label={task.status}
-              color={getStatusColor(task.status)}
-              size="small"
-              sx={{ ml: 2 }}
-            />
-          </Box>
-          
-          <Box sx={{ mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <CalendarToday sx={{ fontSize: 16, color: 'text.secondary', mr: 1 }} />
-              <Typography variant="body2" color="text.secondary">
-                Due: {task.deadline}
-              </Typography>
-            </Box>
-            <LinearProgress
-              variant="determinate"
-              value={task.progress}
-              sx={{
-                height: 6,
-                borderRadius: 3,
-                bgcolor: `${theme.palette.primary.main}15`,
-                '& .MuiLinearProgress-bar': {
-                  borderRadius: 3,
-                },
-              }}
-            />
-          </Box>
-
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button
-              size="small"
-              startIcon={<Comment />}
-              sx={{ color: 'text.secondary' }}
-            >
-              Add Comment
-            </Button>
-            <Button
-              size="small"
-              endIcon={<ArrowForward />}
-              color="primary"
-            >
-              View Details
-            </Button>
-          </Box>
-        </Paper>
-      </motion.div>
-    );
+  const formatTime = (date) => {
+    return date.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
   };
+
+  const formatDate = (date) => {
+    const options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+    return date.toLocaleDateString([], options);
+  };
+
+  // Get days in month
+  const getDaysInMonth = (year, month) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  // Get first day of month
+  const getFirstDayOfMonth = (year, month) => {
+    return new Date(year, month, 1).getDay();
+  };
+
+  // Generate calendar days
+  const generateCalendarDays = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const daysInMonth = getDaysInMonth(year, month);
+    const firstDayOfMonth = getFirstDayOfMonth(year, month);
+    
+    const days = [];
+    
+    // Add empty cells for days before the first day of the month
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      days.push(null);
+    }
+    
+    // Add days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+      days.push(day);
+    }
+    
+    return days;
+  };
+
+  const calendarDays = generateCalendarDays(currentTime);
 
   return (
     <Box sx={{ p: isMobile ? 1 : 3 }}>
@@ -234,242 +303,262 @@ const Dashboard = () => {
         transition={{ duration: 0.5 }}
       >
         <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-            Welcome back, Vivek!
+          {/* Clock and Calendar Section */}
+          <Grid container spacing={2} sx={{ mb: 4 }}>
+            {/* Premium Clock Design */}
+            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Welcome back, Icoderz Army!
           </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Here's what's happening with your projects today.
-          </Typography>
-        </Box>
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title="Total Tasks"
-              value={stats.tasks.total}
-              icon={<Assignment />}
-              color={theme.palette.primary.main}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title="Active Projects"
-              value={stats.projects.active}
-              icon={<TrendingUp />}
-              color={theme.palette.success.main}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title="Upcoming Events"
-              value={stats.projects.upcoming}
-              icon={<CalendarToday />}
-              color={theme.palette.warning.main}
-            />
-          </Grid>
-          {/* <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title="Unread Messages"
-              value={stats.messages.unread}
-              icon={<Message />}
-              color={theme.palette.error.main}
-            />
-          </Grid> */}
-
-          <Grid item xs={12} md={8}>
-            <Paper
-              elevation={0}
-              sx={{
-                p: 3,
-                borderRadius: 2,
-                border: '1px solid',
-                borderColor: 'divider',
-              }}
-            >
-              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
-                Task Progress
-              </Typography>
-              <Box sx={{ mb: 3 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Completed Tasks
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {stats.tasks.completed}/{stats.tasks.total}
-                  </Typography>
-                </Box>
-                <LinearProgress
-                  variant="determinate"
-                  value={(stats.tasks.completed / stats.tasks.total) * 100}
-                  sx={{
-                    height: 8,
-                    borderRadius: 4,
-                    bgcolor: `${theme.palette.primary.main}15`,
-                    '& .MuiLinearProgress-bar': {
-                      borderRadius: 4,
-                    },
-                  }}
-                />
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Box>
-                  <Typography variant="body2" color="text.secondary">
-                    Progress
-                  </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    {stats.tasks.inProgress}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="body2" color="text.secondary">
-                    Pending
-                  </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    {stats.tasks.pending}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="body2" color="text.secondary">
-                    Completed
-                  </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    {stats.tasks.completed}
-                  </Typography>
-                </Box>
-              </Box>
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Paper
-              elevation={0}
-              sx={{
-                p: 3,
-                borderRadius: 2,
-                border: '1px solid',
-                borderColor: 'divider',
-                height: '100%',
-              }}
-            >
-              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
-                Team Members
-              </Typography>
-              <AvatarGroup
-                max={4}
+            <Grid item xs={12} md={6}>
+              <Paper
+                elevation={0}
                 sx={{
-                  '& .MuiAvatar-root': {
-                    width: 40,
-                    height: 40,
-                    fontSize: '1rem',
-                  },
+                  p: 4,
+                  height: '100%',
+                  borderRadius: 4,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  '&:before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: -50,
+                    right: -50,
+                    width: 150,
+                    height: 150,
+                    borderRadius: '50%',
+                    background: 'linear-gradient(45deg, rgba(25,118,210,0.1) 0%, rgba(25,118,210,0.2) 100%)',
+                  }
                 }}
               >
-                <Avatar sx={{ bgcolor: theme.palette.primary.main }}>JD</Avatar>
-                <Avatar sx={{ bgcolor: theme.palette.success.main }}>AB</Avatar>
-                <Avatar sx={{ bgcolor: theme.palette.warning.main }}>CD</Avatar>
-                <Avatar sx={{ bgcolor: theme.palette.error.main }}>EF</Avatar>
-                <Avatar sx={{ bgcolor: theme.palette.info.main }}>GH</Avatar>
-              </AvatarGroup>
-              <Button
-                variant="outlined"
-                fullWidth
-                sx={{ mt: 3 }}
-              >
-                View All Members
-              </Button>
-            </Paper>
-          </Grid>
-        </Grid>
-        <br></br>
-
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} md={8}>
-            <Paper
-              elevation={0}
-              sx={{
-                p: 3,
-                borderRadius: 2,
-                border: '1px solid',
-                borderColor: 'divider',
-              }}
-            >
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                  Recent Tasks
-                </Typography>
-                <Button
-                  endIcon={<ArrowForward />}
-                  sx={{ color: 'primary.main' }}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 16,
+                    right: 16,
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
                 >
-                  View All
-                </Button>
-              </Box>
-              <List sx={{ p: 0 }}>
-                {recentTasks.map((task) => (
-                  <TaskItem key={task.id} task={task} />
-                ))}
-              </List>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Paper
-              elevation={0}
-              sx={{
-                p: 3,
-                borderRadius: 2,
-                border: '1px solid',
-                borderColor: 'divider',
-                height: '100%',
-              }}
-            >
-              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
-                Team Activity
-              </Typography>
-              <List sx={{ p: 0 }}>
-                {[1, 2, 3].map((item) => (
-                  <ListItem
-                    key={item}
-                    sx={{
-                      px: 0,
-                      py: 1.5,
-                      borderBottom: '1px solid',
-                      borderColor: 'divider',
-                      '&:last-child': {
-                        borderBottom: 'none',
-                      },
+                  <AccessTime sx={{ fontSize: 20, color: 'primary.main', mr: 1 }} />
+                  <Typography variant="body2" color="primary.main">
+                    LIVE
+                  </Typography>
+                </Box>
+                
+                <Typography variant="h5" color="text.secondary" sx={{ mb: 1 }}>
+                  {formatDate(currentTime)}
+                </Typography>
+                
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    mb: 2,
+                  }}
+                >
+                  <Typography 
+                    variant="h1" 
+                    sx={{ 
+                      fontWeight: 'bold', 
+                      fontSize: '4.5rem',
+                      lineHeight: 1,
+                      background: 'linear-gradient(45deg, #1976d2 0%, #115293 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
                     }}
                   >
-                    <Avatar
+                    {formatTime(currentTime).split(':')[0]}
+                  </Typography>
+                  <Typography 
+                    variant="h2" 
+                    sx={{ 
+                      fontWeight: 'bold', 
+                      mx: 0.5,
+                      color: 'text.secondary',
+                    }}
+                  >
+                    :
+                  </Typography>
+                  <Typography 
+                    variant="h1" 
+                    sx={{ 
+                      fontWeight: 'bold', 
+                      fontSize: '4.5rem',
+                      lineHeight: 1,
+                      background: 'linear-gradient(45deg, #1976d2 0%, #115293 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    }}
+                  >
+                    {formatTime(currentTime).split(':')[1]}
+                  </Typography>
+                  <Typography 
+                    variant="h3" 
+                    sx={{ 
+                      fontWeight: 'bold', 
+                      ml: 1,
+                      color: 'text.secondary',
+                    }}
+                  >
+                    {formatTime(currentTime).split(' ')[1]}
+                  </Typography>
+                </Box>
+                
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    fontWeight: 'medium',
+                    color: 'text.secondary',
+                    letterSpacing: 2,
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {currentTime.toLocaleTimeString([], { second: '2-digit' })} seconds
+                </Typography>
+              </Paper>
+            </Grid>
+            
+            {/* Premium Calendar Design */}
+            <Grid item xs={12} md={6}>
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  borderRadius: 4,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)',
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                  <DateRange sx={{ 
+                    fontSize: 30, 
+                    color: 'primary.main', 
+                    mr: 2,
+                    background: 'linear-gradient(45deg, #1976d2 0%, #115293 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }} />
+                  <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                    {currentTime.toLocaleDateString([], { month: 'long', year: 'numeric' })}
+                  </Typography>
+                </Box>
+                
+                {/* Day headers */}
+                <Box sx={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(7, 1fr)',
+                  gap: 1,
+                  textAlign: 'center',
+                  mb: 2
+                }}>
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
+                    <Typography 
+                      key={day} 
+                      variant="body2" 
                       sx={{
-                        width: 32,
-                        height: 32,
-                        mr: 2,
-                        bgcolor: theme.palette.primary.main,
+                        fontWeight: 'bold',
+                        color: index === 0 || index === 6 ? 'error.main' : 'text.secondary',
+                        p: 1,
                       }}
                     >
-                      {String.fromCharCode(64 + item)}
-                    </Avatar>
-                    <ListItemText
-                      primary={
-                        <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                          Team member {item} completed a task
-                        </Typography>
-                      }
-                      secondary={
-                        <Typography variant="caption" color="text.secondary">
-                          2 hours ago
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
+                      {day}
+                    </Typography>
+                  ))}
+                </Box>
+                
+                {/* Calendar days */}
+                <Box sx={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(7, 1fr)',
+                  gap: 1,
+                  textAlign: 'center'
+                }}>
+                  {calendarDays.map((day, index) => {
+                    if (day === null) {
+                      return <Box key={`empty-${index}`} sx={{ p: 2 }} />;
+                    }
+                    
+                    const dayOfWeek = new Date(
+                      currentTime.getFullYear(),
+                      currentTime.getMonth(),
+                      day
+                    ).getDay();
+                    
+                    const isToday = day === currentTime.getDate() && 
+                                  currentTime.getMonth() === new Date().getMonth() && 
+                                  currentTime.getFullYear() === new Date().getFullYear();
+                    
+                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    
+                    return (
+                      <Box
+                        key={`day-${day}`}
+                        sx={{
+                          p: 1.5,
+                          borderRadius: '50%',
+                          bgcolor: isToday ? 'primary.main' : 'transparent',
+                          color: isToday ? 'common.white' : 
+                                isWeekend ? 'error.main' : 'text.primary',
+                          fontWeight: isToday ? 'bold' : 'medium',
+                          cursor: 'pointer',
+                          position: 'relative',
+                          '&:hover': {
+                            bgcolor: isToday ? 'primary.dark' : 'action.hover',
+                          },
+                          '&:after': isToday ? {
+                            content: '""',
+                            position: 'absolute',
+                            bottom: 4,
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: 6,
+                            height: 6,
+                            borderRadius: '50%',
+                            bgcolor: 'common.white',
+                          } : {}
+                        }}
+                      >
+                        {day}
+                      </Box>
+                    );
+                  })}
+                </Box>
+                
+                {/* Calendar footer */}
+                <Box sx={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  mt: 'auto',
+                  pt: 2,
+                  borderTop: '1px solid',
+                  borderColor: 'divider'
+                }}>
+                  <Typography variant="body2" color="text.secondary">
+                    {currentTime.toLocaleDateString([], { weekday: 'long' })}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {currentTime.getDate()} {currentTime.toLocaleDateString([], { month: 'short' })}
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </motion.div>
     </Box>
   );
 };
 
-export default Dashboard; 
+export default Dashboard;
+

@@ -29,39 +29,39 @@ const Projects = () => {
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   const [projects, setProjects] = useState([
-    {
-      id: 1,
-      title: 'Website Redesign',
-      description: 'Complete overhaul of the company website with modern design and improved UX',
-      progress: 75,
-      deadline: '2024-06-15',
-      team: ['JD', 'AB', 'CD', 'EF'],
-      status: 'In Progress',
-      priority: 'High',
-      tasks: { total: 24, completed: 18 },
-    },
-    {
-      id: 2,
-      title: 'Mobile App Development',
-      description: 'Development of a new mobile application for iOS and Android platforms',
-      progress: 45,
-      deadline: '2024-07-30',
-      team: ['JD', 'GH', 'IJ'],
-      status: 'In Progress',
-      priority: 'Medium',
-      tasks: { total: 36, completed: 16 },
-    },
-    {
-      id: 3,
-      title: 'Database Migration',
-      description: 'Migration of legacy database to new cloud-based solution',
-      progress: 90,
-      deadline: '2024-05-20',
-      team: ['JD', 'KL', 'MN'],
-      status: 'Almost Done',
-      priority: 'High',
-      tasks: { total: 12, completed: 11 },
-    },
+    // {
+    //   id: 1,
+    //   title: 'Website Redesign',
+    //   description: 'Complete overhaul of the company website with modern design and improved UX',
+    //   progress: 75,
+    //   deadline: '2024-06-15',
+    //   team: ['JD', 'AB', 'CD', 'EF'],
+    //   status: 'In Progress',
+    //   priority: 'High',
+    //   tasks: { total: 24, completed: 18 },
+    // },
+    // {
+    //   id: 2,
+    //   title: 'Mobile App Development',
+    //   description: 'Development of a new mobile application for iOS and Android platforms',
+    //   progress: 45,
+    //   deadline: '2024-07-30',
+    //   team: ['JD', 'GH', 'IJ'],
+    //   status: 'In Progress',
+    //   priority: 'Medium',
+    //   tasks: { total: 36, completed: 16 },
+    // },
+    // {
+    //   id: 3,
+    //   title: 'Database Migration',
+    //   description: 'Migration of legacy database to new cloud-based solution',
+    //   progress: 90,
+    //   deadline: '2024-05-20',
+    //   team: ['JD', 'KL', 'MN'],
+    //   status: 'Almost Done',
+    //   priority: 'High',
+    //   tasks: { total: 12, completed: 11 },
+    // },
   ]);
 
   const ProjectCard = ({ project }) => (
@@ -181,7 +181,7 @@ const Projects = () => {
               Track and manage your ongoing projects
             </Typography>
           </Box>
-          <Button
+          {/* <Button
             variant="contained"
             startIcon={<AddIcon />}
             sx={{
@@ -191,7 +191,7 @@ const Projects = () => {
             }}
           >
             New Project
-          </Button>
+          </Button> */}
         </Box>
 
         <Grid container spacing={3}>
