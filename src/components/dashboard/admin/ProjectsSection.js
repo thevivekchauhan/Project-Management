@@ -30,7 +30,7 @@ import {
   Add as AddIcon,
   Edit,
   Delete,
-  Visibility,
+  // Visibility,
 } from '@mui/icons-material';
 import { format } from 'date-fns';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -299,15 +299,7 @@ const ProjectsSection = () => {
                 </TableCell>
                 <TableCell>
                   <Stack direction="row" spacing={1}>
-                    <Tooltip title="View Details">
-                      <IconButton
-                        size="small"
-                        onClick={() => navigate(`/admin/projects/${project._id}`)}
-                        sx={{ color: theme.palette.info.main }}
-                      >
-                        <Visibility fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
+            
                     <Tooltip title="Edit Project">
                       <IconButton
                         size="small"

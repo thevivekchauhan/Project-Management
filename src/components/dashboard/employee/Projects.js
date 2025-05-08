@@ -219,15 +219,6 @@ const Projects = () => {
           <Box>
             <Button
               size="small"
-              endIcon={<Visibility />}
-              onClick={() => navigate(`/employee/projects/${project._id}`)}
-              color="primary"
-              sx={{ mr: 1 }}
-            >
-              View Details
-            </Button>
-            <Button
-              size="small"
               endIcon={<Edit />}
               onClick={() => handleEditProject(project)}
               color="secondary"
@@ -321,15 +312,6 @@ const Projects = () => {
               </TableCell>
               <TableCell>
                 <Stack direction="row" spacing={1}>
-                  <Tooltip title="View Details">
-                    <IconButton
-                      size="small"
-                      onClick={() => navigate(`/employee/projects/${project._id}`)}
-                      sx={{ color: theme.palette.info.main }}
-                    >
-                      <Visibility fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
                   <Tooltip title="Edit Project">
                     <IconButton
                       size="small"

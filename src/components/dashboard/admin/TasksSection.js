@@ -385,15 +385,6 @@ const TasksSection = ({ projects }) => {
                   </TableCell>
                   <TableCell>
                     <Stack direction="row" spacing={{ xs: 0.5, sm: 1 }}>
-                      <Tooltip title="View Details">
-                        <IconButton
-                          size="small"
-                          onClick={() => navigate(`/admin/tasks/${task._id}`)}
-                          sx={{ color: theme.palette.info.main }}
-                        >
-                          <Visibility fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
                       <Tooltip title="Edit Task">
                         <IconButton
                           size="small"
