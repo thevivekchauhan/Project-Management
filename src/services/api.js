@@ -2,11 +2,13 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api';
 
+// Create axios instance with better timeout and retry options
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000, // 10 seconds timeout
 });
 
 // Add token to requests if it exists
@@ -16,17 +18,53 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
+}, (error) => {
+  return Promise.reject(error);
 });
+
+// Add response interceptor for better error handling
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    
+    // Network errors often don't have response
+    if (!error.response && !originalRequest._retry) {
+      console.error('Network error detected:', error.message);
+      originalRequest._retry = true;
+      
+      // Wait a moment and retry once for network errors
+      return new Promise(resolve => {
+        setTimeout(() => {
+          console.log('Retrying request after network error');
+          resolve(axios(originalRequest));
+        }, 1000);
+      });
+    }
+    
+    return Promise.reject(error);
+  }
+);
 
 export const authApi = {
   register: async (userData) => {
-    const response = await api.post('/auth/register', userData);
-    return response.data;
+    try {
+      const response = await api.post('/auth/register', userData);
+      return response.data;
+    } catch (error) {
+      console.error('Registration error:', error.response?.data || error.message);
+      throw error;
+    }
   },
 
   login: async (credentials) => {
-    const response = await api.post('/auth/login', credentials);
-    return response.data;
+    try {
+      const response = await api.post('/auth/login', credentials);
+      return response.data;
+    } catch (error) {
+      console.error('Login error:', error.response?.data || error.message);
+      throw error;
+    }
   },
 };
 
@@ -38,7 +76,7 @@ export const projectApi = {
       console.log('Projects response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error('Error fetching projects:', error.response?.data || error.message);
       throw error;
     }
   },
@@ -46,11 +84,19 @@ export const projectApi = {
   createProject: async (projectData) => {
     try {
       console.log('Creating project with data:', projectData);
-      const response = await api.post('/projects', projectData);
+      
+      // Ensure dates are properly formatted
+      const formattedData = {
+        ...projectData,
+        startDate: projectData.startDate instanceof Date ? projectData.startDate : new Date(projectData.startDate),
+        endDate: projectData.endDate instanceof Date ? projectData.endDate : new Date(projectData.endDate)
+      };
+      
+      const response = await api.post('/projects', formattedData);
       console.log('Create project response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error creating project:', error);
+      console.error('Error creating project:', error.response?.data || error.message);
       throw error;
     }
   },
@@ -62,7 +108,7 @@ export const projectApi = {
       console.log('Update project response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error updating project:', error);
+      console.error('Error updating project:', error.response?.data || error.message);
       throw error;
     }
   },
@@ -74,7 +120,7 @@ export const projectApi = {
       console.log('Delete project response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error deleting project:', error);
+      console.error('Error deleting project:', error.response?.data || error.message);
       throw error;
     }
   },

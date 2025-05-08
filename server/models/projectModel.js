@@ -7,6 +7,14 @@ const projectSchema = new mongoose.Schema({
   endDate: { type: Date },
   progress: { type: Number, default: 0 },
   status: { type: String, enum: ['Active', 'Completed'], default: 'Active' },
+  createdBy: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User'
+  },
+  members: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User'
+  }],
 }, { 
   timestamps: true,
   collection: 'project' // Explicitly set collection name to 'project'

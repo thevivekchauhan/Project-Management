@@ -149,14 +149,30 @@ const ProjectsSection = () => {
   const handleSaveNewProject = async () => {
     try {
       setLoading(true);
+      
+      // Validate required fields
+      if (!newProject.name) {
+        setSnackbar({
+          open: true,
+          message: 'Project name is required',
+          severity: 'error'
+        });
+        setLoading(false);
+        return;
+      }
+
       const response = await projectApi.createProject(newProject);
       console.log('Create project response:', response);
       
-      if (response && (response.project || response.success)) {
+      // Handle different response formats
+      if (response) {
+        // Determine the project data from response
+        const createdProject = response.data || response.project || response;
+        
         // Add the new project to the projects array
-        const createdProject = response.project || response;
         setProjects(prevProjects => [createdProject, ...prevProjects]);
         
+        // Reset form and close dialog
         setOpenNewProject(false);
         setNewProject({
           name: '',
@@ -166,6 +182,8 @@ const ProjectsSection = () => {
           progress: 0,
           status: 'Active'
         });
+        
+        // Show success message
         setSnackbar({
           open: true,
           message: 'Project created successfully',
@@ -174,9 +192,15 @@ const ProjectsSection = () => {
       }
     } catch (error) {
       console.error('Error creating project:', error);
+      
+      // Extract error message from various error formats
+      const errorMessage = error.response?.data?.message || 
+                           error.message || 
+                          'Network error occurred. Please try again.';
+      
       setSnackbar({
         open: true,
-        message: error.message || 'Failed to create project',
+        message: errorMessage,
         severity: 'error'
       });
     } finally {
