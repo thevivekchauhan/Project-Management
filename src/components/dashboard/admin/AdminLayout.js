@@ -54,8 +54,8 @@ const AdminLayout = ({ children }) => {
     { text: 'Home', icon: <Home />, path: '/admin/settings' },
     { text: 'Dashboard', icon: <Dashboard />, path: '#dashboard' },
     { text: 'Projects', icon: <FolderSpecial />, path: '#projects' },
-    { text: 'Tasks', icon: <Assignment />, path: '#tasks' },
-    { text: 'Activity', icon: <Timeline />, path: '#activity' },
+    // { text: 'Tasks', icon: <Assignment />, path: '#tasks' },
+    { text: 'Analytics', icon: <Timeline />, path: '#activity' },
     // { text: 'Team', icon: <People />, path: '/admin/team' },
     // { text: 'Settings', icon: <Settings />, path: '/admin/settings' },
   ];

@@ -270,19 +270,16 @@ const ProjectsSection = () => {
         </Button>
       </Box>
 
-      {/* Add Project Charts */}
-      <Box sx={{ mb: 4 }}>
-        <ProjectCharts projects={projects} />
-      </Box>
-
       {loading && <LinearProgress sx={{ mb: 2 }} />}
 
+      {/* Projects Table */}
       <TableContainer
         component={Paper}
         sx={{
           boxShadow: '0 4px 20px 0 rgba(0,0,0,0.1)',
           borderRadius: 2,
           overflow: 'hidden',
+          mb: 4
         }}
       >
         <Table>
@@ -383,6 +380,14 @@ const ProjectsSection = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Project Charts */}
+      <Box>
+        <Typography variant="h6" sx={{ fontWeight: 600, color: '#1a237e', mb: 2 }}>
+          Project Analytics
+        </Typography>
+        <ProjectCharts projects={projects} />
+      </Box>
 
       {/* Edit Project Dialog */}
       <Dialog open={!!editProject} onClose={() => setEditProject(null)} maxWidth="sm" fullWidth>
