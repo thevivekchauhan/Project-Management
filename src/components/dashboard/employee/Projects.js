@@ -31,6 +31,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Divider,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -45,6 +46,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { projectApi, userApi } from '../../../services/api';
+import ProjectCharts from '../admin/ProjectCharts';
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -415,6 +417,15 @@ const Projects = () => {
         {loading && <LinearProgress sx={{ mb: 2 }} />}
 
         {viewMode === 'card' ? renderCardView() : renderTableView()}
+        
+        {/* Project Analytics */}
+        <Box sx={{ mt: 6, mb: 4 }}>
+          <Divider sx={{ my: 4, borderColor: 'rgba(0, 0, 0, 0.1)' }} />
+          <Typography variant="h5" sx={{ fontWeight: 600, color: '#1a237e', mb: 3 }}>
+            Project Analytics
+          </Typography>
+          <ProjectCharts projects={projects} />
+        </Box>
       </motion.div>
 
       {/* Edit Project Dialog */}
