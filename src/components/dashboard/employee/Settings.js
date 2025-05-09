@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import {
   Box,
@@ -15,6 +16,7 @@ import {
   useTheme,
   useMediaQuery,
   Alert,
+  CircularProgress,
 } from '@mui/material';
 import {
   Save as SaveIcon,
@@ -24,18 +26,21 @@ import {
   Language as LanguageIcon,
   Palette as PaletteIcon,
 } from '@mui/icons-material';
+import { updateProfile } from '../../../store/authSlice';
 
 const Settings = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const dispatch = useDispatch();
+  const { user, loading, error } = useSelector((state) => state.auth);
 
   const [settings, setSettings] = useState({
     profile: {
-      name: 'Vivek',
-      email: 'vivek@gmail.com',
-      role: 'Software Developer',
-      avatar: 'V',
+      firstName: '',
+      lastName: '',
+      email: '',
+      department: '',
     },
     notifications: {
       email: true,
@@ -47,9 +52,41 @@ const Settings = () => {
   });
 
   const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertSeverity, setAlertSeverity] = useState('success');
 
-  const handleSave = () => {
-    setShowAlert(true);
+  useEffect(() => {
+    if (user) {
+      setSettings({
+        ...settings,
+        profile: {
+          firstName: user.firstName || '',
+          lastName: user.lastName || '',
+          email: user.email || '',
+          department: user.department || '',
+        }
+      });
+    }
+  }, [user]);
+
+  const handleSave = async () => {
+    try {
+      await dispatch(updateProfile({
+        firstName: settings.profile.firstName,
+        lastName: settings.profile.lastName,
+        email: settings.profile.email,
+        department: settings.profile.department,
+      })).unwrap();
+      
+      setAlertMessage('Profile updated successfully!');
+      setAlertSeverity('success');
+      setShowAlert(true);
+    } catch (err) {
+      setAlertMessage(err || 'Failed to update profile');
+      setAlertSeverity('error');
+      setShowAlert(true);
+    }
+    
     setTimeout(() => setShowAlert(false), 3000);
   };
 
@@ -92,25 +129,26 @@ const Settings = () => {
           </Box>
           <Button
             variant="contained"
-            startIcon={<SaveIcon />}
+            startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
             onClick={handleSave}
+            disabled={loading}
             sx={{
               borderRadius: 2,
               textTransform: 'none',
               px: 3,
             }}
           >
-            Save Changes
+            {loading ? 'Saving...' : 'Save Changes'}
           </Button>
         </Box>
 
         {showAlert && (
           <Alert
-            severity="success"
+            severity={alertSeverity}
             sx={{ mb: 3 }}
             onClose={() => setShowAlert(false)}
           >
-            Settings saved successfully!
+            {alertMessage}
           </Alert>
         )}
 
@@ -129,7 +167,7 @@ const Settings = () => {
                     fontSize: '2rem',
                   }}
                 >
-                  {settings.profile.avatar}
+                  {settings.profile.firstName?.charAt(0)}
                 </Avatar>
                 <Box sx={{ ml: 3 }}>
                   <Button
@@ -149,12 +187,25 @@ const Settings = () => {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Full Name"
-                    value={settings.profile.name}
+                    label="First Name"
+                    value={settings.profile.firstName}
                     onChange={(e) =>
                       setSettings({
                         ...settings,
-                        profile: { ...settings.profile, name: e.target.value },
+                        profile: { ...settings.profile, firstName: e.target.value },
+                      })
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Last Name"
+                    value={settings.profile.lastName}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        profile: { ...settings.profile, lastName: e.target.value },
                       })
                     }
                   />
@@ -172,15 +223,15 @@ const Settings = () => {
                     }
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Role"
-                    value={settings.profile.role}
+                    label="Department"
+                    value={settings.profile.department}
                     onChange={(e) =>
                       setSettings({
                         ...settings,
-                        profile: { ...settings.profile, role: e.target.value },
+                        profile: { ...settings.profile, department: e.target.value },
                       })
                     }
                   />

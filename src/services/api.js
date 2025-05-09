@@ -249,6 +249,18 @@ export const userApi = {
       console.error('Error fetching user:', error.response?.data || error.message);
       throw error;
     }
+  },
+  
+  updateProfile: async (profileData) => {
+    try {
+      console.log('Updating profile with data:', profileData);
+      const response = await api.put('/users/profile', profileData);
+      console.log('Update profile response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating profile:', error.response?.data || error.message);
+      throw error;
+    }
   }
 };
 

@@ -56,4 +56,50 @@ router.get('/:id', protect, async (req, res) => {
     }
 });
 
+// Update user profile
+router.put('/profile', protect, async (req, res) => {
+    try {
+        const { firstName, lastName, email, department } = req.body;
+        
+        // Find user
+        const user = await User.findById(req.user.id);
+        
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+        
+        // Update fields
+        if (firstName) user.firstName = firstName;
+        if (lastName) user.lastName = lastName;
+        if (email) user.email = email;
+        if (department && user.role === 'employee') user.department = department;
+        
+        await user.save();
+        
+        // Return updated user (excluding password)
+        const updatedUser = {
+            id: user._id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+            ...(user.role === 'admin' ? { companyName: user.companyName } : { department: user.department })
+        };
+        
+        res.json({
+            success: true,
+            message: 'Profile updated successfully',
+            user: updatedUser
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
 module.exports = router; 

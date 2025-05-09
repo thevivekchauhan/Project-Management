@@ -1,219 +1,6 @@
-// import { useState } from 'react';
-// import { motion } from 'framer-motion';
-// import {
-//   Box,
-//   Grid,
-//   Paper,
-//   Typography,
-//   Chip,
-//   Button,
-//   Avatar,
-//   AvatarGroup,
-//   LinearProgress,
-//   useTheme,
-//   useMediaQuery,
-//   IconButton,
-// } from '@mui/material';
-// import {
-//   Add as AddIcon,
-//   CalendarToday,
-//   Group,
-//   ArrowForward,
-//   Star,
-//   StarBorder,
-// } from '@mui/icons-material';
-
-// const Projects = () => {
-//   const theme = useTheme();
-//   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-//   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-
-//   const [projects, setProjects] = useState([
-//     // {
-//     //   id: 1,
-//     //   title: 'Website Redesign',
-//     //   description: 'Complete overhaul of the company website with modern design and improved UX',
-//     //   progress: 75,
-//     //   deadline: '2024-06-15',
-//     //   team: ['JD', 'AB', 'CD', 'EF'],
-//     //   status: 'In Progress',
-//     //   priority: 'High',
-//     //   tasks: { total: 24, completed: 18 },
-//     // },
-//     // {
-//     //   id: 2,
-//     //   title: 'Mobile App Development',
-//     //   description: 'Development of a new mobile application for iOS and Android platforms',
-//     //   progress: 45,
-//     //   deadline: '2024-07-30',
-//     //   team: ['JD', 'GH', 'IJ'],
-//     //   status: 'In Progress',
-//     //   priority: 'Medium',
-//     //   tasks: { total: 36, completed: 16 },
-//     // },
-//     // {
-//     //   id: 3,
-//     //   title: 'Database Migration',
-//     //   description: 'Migration of legacy database to new cloud-based solution',
-//     //   progress: 90,
-//     //   deadline: '2024-05-20',
-//     //   team: ['JD', 'KL', 'MN'],
-//     //   status: 'Almost Done',
-//     //   priority: 'High',
-//     //   tasks: { total: 12, completed: 11 },
-//     // },
-//   ]);
-
-//   const ProjectCard = ({ project }) => (
-//     <motion.div
-//       initial={{ opacity: 0, y: 20 }}
-//       animate={{ opacity: 1, y: 0 }}
-//       transition={{ duration: 0.3 }}
-//     >
-//       <Paper
-//         elevation={0}
-//         sx={{
-//           p: 3,
-//           height: '100%',
-//           borderRadius: 2,
-//           border: '1px solid',
-//           borderColor: 'divider',
-//           '&:hover': {
-//             boxShadow: 2,
-//           },
-//         }}
-//       >
-//         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-//           <Box>
-//             <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
-//               {project.title}
-//             </Typography>
-//             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-//               {project.description}
-//             </Typography>
-//           </Box>
-//           <IconButton size="small">
-//             <StarBorder />
-//           </IconButton>
-//         </Box>
-
-//         <Box sx={{ mb: 2 }}>
-//           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-//             <CalendarToday sx={{ fontSize: 16, color: 'text.secondary', mr: 1 }} />
-//             <Typography variant="body2" color="text.secondary">
-//               Due: {project.deadline}
-//             </Typography>
-//           </Box>
-//           <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-//             <Group sx={{ fontSize: 16, color: 'text.secondary', mr: 1 }} />
-//             <AvatarGroup max={4} sx={{ '& .MuiAvatar-root': { width: 24, height: 24, fontSize: '0.75rem' } }}>
-//               {project.team.map((member, index) => (
-//                 <Avatar key={index} sx={{ bgcolor: theme.palette.primary.main }}>
-//                   {member}
-//                 </Avatar>
-//               ))}
-//             </AvatarGroup>
-//           </Box>
-//         </Box>
-
-//         <Box sx={{ mb: 2 }}>
-//           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-//             <Typography variant="body2" color="text.secondary">
-//               Progress
-//             </Typography>
-//             <Typography variant="body2" color="text.secondary">
-//               {project.progress}%
-//             </Typography>
-//           </Box>
-//           <LinearProgress
-//             variant="determinate"
-//             value={project.progress}
-//             sx={{
-//               height: 6,
-//               borderRadius: 3,
-//               bgcolor: `${theme.palette.primary.main}15`,
-//               '& .MuiLinearProgress-bar': {
-//                 borderRadius: 3,
-//               },
-//             }}
-//           />
-//         </Box>
-
-//         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-//           <Box>
-//             <Chip
-//               label={project.status}
-//               size="small"
-//               color={project.status === 'Almost Done' ? 'success' : 'primary'}
-//               sx={{ mr: 1 }}
-//             />
-//             <Chip
-//               label={project.priority}
-//               size="small"
-//               color={project.priority === 'High' ? 'error' : 'warning'}
-//             />
-//           </Box>
-//           <Button
-//             size="small"
-//             endIcon={<ArrowForward />}
-//             color="primary"
-//           >
-//             View Details
-//           </Button>
-//         </Box>
-//       </Paper>
-//     </motion.div>
-//   );
-
-//   return (
-//     <Box sx={{ p: isMobile ? 1 : 3 }}>
-//       <motion.div
-//         initial={{ opacity: 0, y: 20 }}
-//         animate={{ opacity: 1, y: 0 }}
-//         transition={{ duration: 0.5 }}
-//       >
-//         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-//           <Box>
-//             <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-//               My Projects
-//             </Typography>
-//             <Typography variant="body1" color="text.secondary">
-//               Track and manage your ongoing projects
-//             </Typography>
-//           </Box>
-//           {/* <Button
-//             variant="contained"
-//             startIcon={<AddIcon />}
-//             sx={{
-//               borderRadius: 2,
-//               textTransform: 'none',
-//               px: 3,
-//             }}
-//           >
-//             New Project
-//           </Button> */}
-//         </Box>
-
-//         <Grid container spacing={3}>
-//           {projects.map((project) => (
-//             <Grid item xs={12} md={6} lg={4} key={project.id}>
-//               <ProjectCard project={project} />
-//             </Grid>
-//           ))}
-//         </Grid>
-//       </motion.div>
-//     </Box>
-//   );
-// };
-
-// export default Projects; 
-
-
-
-
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
 import {
   Box,
   Grid,
@@ -230,8 +17,10 @@ import {
 const Dashboard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { user } = useSelector((state) => state.auth);
 
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [calendarDays, setCalendarDays] = useState([]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -243,6 +32,10 @@ const Dashboard = () => {
     };
   }, []);
 
+  useEffect(() => {
+    setCalendarDays(generateCalendarDays(currentTime));
+  }, [currentTime]);
+
   const formatTime = (date) => {
     return date.toLocaleTimeString([], {
       hour: '2-digit',
@@ -252,26 +45,21 @@ const Dashboard = () => {
   };
 
   const formatDate = (date) => {
-    const options = {
+    return date.toLocaleDateString([], {
       weekday: 'long',
-      year: 'numeric',
       month: 'long',
       day: 'numeric',
-    };
-    return date.toLocaleDateString([], options);
+    });
   };
 
-  // Get days in month
   const getDaysInMonth = (year, month) => {
     return new Date(year, month + 1, 0).getDate();
   };
 
-  // Get first day of month
   const getFirstDayOfMonth = (year, month) => {
     return new Date(year, month, 1).getDay();
   };
 
-  // Generate calendar days
   const generateCalendarDays = (date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -286,14 +74,12 @@ const Dashboard = () => {
     }
     
     // Add days of the month
-    for (let day = 1; day <= daysInMonth; day++) {
-      days.push(day);
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(i);
     }
     
     return days;
   };
-
-  const calendarDays = generateCalendarDays(currentTime);
 
   return (
     <Box sx={{ p: isMobile ? 1 : 3 }}>
@@ -303,258 +89,262 @@ const Dashboard = () => {
         transition={{ duration: 0.5 }}
       >
         <Box sx={{ mb: 4 }}>
-          {/* Clock and Calendar Section */}
-          <Grid container spacing={2} sx={{ mb: 4 }}>
-            {/* Premium Clock Design */}
-            <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-            Welcome back, Icoderz Army!
+          <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Welcome, {user?.firstName || 'Employee'}!
           </Typography>
-            <Grid item xs={12} md={6}>
-              <Paper
-                elevation={0}
+          <Typography variant="body1" color="text.secondary">
+            Here's your dashboard overview
+          </Typography>
+        </Box>
+
+        {/* Clock and Calendar Section */}
+        <Grid container spacing={2} sx={{ mb: 4 }}>
+          {/* Premium Clock Design */}
+          <Grid item xs={12} md={6}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 4,
+                height: '100%',
+                borderRadius: 4,
+                border: '1px solid',
+                borderColor: 'divider',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)',
+                position: 'relative',
+                overflow: 'hidden',
+                '&:before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: -50,
+                  right: -50,
+                  width: 150,
+                  height: 150,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(45deg, rgba(25,118,210,0.1) 0%, rgba(25,118,210,0.2) 100%)',
+                }
+              }}
+            >
+              <Box
                 sx={{
-                  p: 4,
-                  height: '100%',
-                  borderRadius: 4,
-                  border: '1px solid',
-                  borderColor: 'divider',
+                  position: 'absolute',
+                  top: 16,
+                  right: 16,
                   display: 'flex',
-                  flexDirection: 'column',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  '&:before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: -50,
-                    right: -50,
-                    width: 150,
-                    height: 150,
-                    borderRadius: '50%',
-                    background: 'linear-gradient(45deg, rgba(25,118,210,0.1) 0%, rgba(25,118,210,0.2) 100%)',
-                  }
                 }}
               >
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    top: 16,
-                    right: 16,
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <AccessTime sx={{ fontSize: 20, color: 'primary.main', mr: 1 }} />
-                  <Typography variant="body2" color="primary.main">
-                    LIVE
-                  </Typography>
-                </Box>
-                
-                <Typography variant="h5" color="text.secondary" sx={{ mb: 1 }}>
-                  {formatDate(currentTime)}
+                <AccessTime sx={{ fontSize: 20, color: 'primary.main', mr: 1 }} />
+                <Typography variant="body2" color="primary.main">
+                  LIVE
                 </Typography>
-                
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'baseline',
-                    mb: 2,
-                  }}
-                >
-                  <Typography 
-                    variant="h1" 
-                    sx={{ 
-                      fontWeight: 'bold', 
-                      fontSize: '4.5rem',
-                      lineHeight: 1,
-                      background: 'linear-gradient(45deg, #1976d2 0%, #115293 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                    }}
-                  >
-                    {formatTime(currentTime).split(':')[0]}
-                  </Typography>
-                  <Typography 
-                    variant="h2" 
-                    sx={{ 
-                      fontWeight: 'bold', 
-                      mx: 0.5,
-                      color: 'text.secondary',
-                    }}
-                  >
-                    :
-                  </Typography>
-                  <Typography 
-                    variant="h1" 
-                    sx={{ 
-                      fontWeight: 'bold', 
-                      fontSize: '4.5rem',
-                      lineHeight: 1,
-                      background: 'linear-gradient(45deg, #1976d2 0%, #115293 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                    }}
-                  >
-                    {formatTime(currentTime).split(':')[1]}
-                  </Typography>
-                  <Typography 
-                    variant="h3" 
-                    sx={{ 
-                      fontWeight: 'bold', 
-                      ml: 1,
-                      color: 'text.secondary',
-                    }}
-                  >
-                    {formatTime(currentTime).split(' ')[1]}
-                  </Typography>
-                </Box>
-                
-                <Typography 
-                  variant="h6" 
-                  sx={{ 
-                    fontWeight: 'medium',
-                    color: 'text.secondary',
-                    letterSpacing: 2,
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {currentTime.toLocaleTimeString([], { second: '2-digit' })} seconds
-                </Typography>
-              </Paper>
-            </Grid>
-            
-            {/* Premium Calendar Design */}
-            <Grid item xs={12} md={6}>
-              <Paper
-                elevation={0}
+              </Box>
+              
+              <Typography variant="h5" color="text.secondary" sx={{ mb: 1 }}>
+                {formatDate(currentTime)}
+              </Typography>
+              
+              <Box
                 sx={{
-                  p: 3,
-                  height: '100%',
-                  borderRadius: 4,
-                  border: '1px solid',
-                  borderColor: 'divider',
                   display: 'flex',
-                  flexDirection: 'column',
-                  background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)',
+                  alignItems: 'baseline',
+                  mb: 2,
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                  <DateRange sx={{ 
-                    fontSize: 30, 
-                    color: 'primary.main', 
-                    mr: 2,
+                <Typography 
+                  variant="h1" 
+                  sx={{ 
+                    fontWeight: 'bold', 
+                    fontSize: '4.5rem',
+                    lineHeight: 1,
                     background: 'linear-gradient(45deg, #1976d2 0%, #115293 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                  }} />
-                  <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                    {currentTime.toLocaleDateString([], { month: 'long', year: 'numeric' })}
+                  }}
+                >
+                  {formatTime(currentTime).split(':')[0]}
+                </Typography>
+                <Typography 
+                  variant="h2" 
+                  sx={{ 
+                    fontWeight: 'bold', 
+                    mx: 0.5,
+                    color: 'text.secondary',
+                  }}
+                >
+                  :
+                </Typography>
+                <Typography 
+                  variant="h1" 
+                  sx={{ 
+                    fontWeight: 'bold', 
+                    fontSize: '4.5rem',
+                    lineHeight: 1,
+                    background: 'linear-gradient(45deg, #1976d2 0%, #115293 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  {formatTime(currentTime).split(':')[1]}
+                </Typography>
+                <Typography 
+                  variant="h3" 
+                  sx={{ 
+                    fontWeight: 'bold', 
+                    ml: 1,
+                    color: 'text.secondary',
+                  }}
+                >
+                  {formatTime(currentTime).split(' ')[1]}
+                </Typography>
+              </Box>
+              
+              <Typography 
+                variant="h6" 
+                sx={{ 
+                  fontWeight: 'medium',
+                  color: 'text.secondary',
+                  letterSpacing: 2,
+                  textTransform: 'uppercase',
+                }}
+              >
+                {currentTime.toLocaleTimeString([], { second: '2-digit' })} seconds
+              </Typography>
+            </Paper>
+          </Grid>
+          
+          {/* Premium Calendar Design */}
+          <Grid item xs={12} md={6}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                height: '100%',
+                borderRadius: 4,
+                border: '1px solid',
+                borderColor: 'divider',
+                display: 'flex',
+                flexDirection: 'column',
+                background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)',
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <DateRange sx={{ 
+                  fontSize: 30, 
+                  color: 'primary.main', 
+                  mr: 2,
+                  background: 'linear-gradient(45deg, #1976d2 0%, #115293 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }} />
+                <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                  {currentTime.toLocaleDateString([], { month: 'long', year: 'numeric' })}
+                </Typography>
+              </Box>
+              
+              {/* Day headers */}
+              <Box sx={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(7, 1fr)',
+                gap: 1,
+                textAlign: 'center',
+                mb: 2
+              }}>
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
+                  <Typography 
+                    key={day} 
+                    variant="body2" 
+                    sx={{
+                      fontWeight: 'bold',
+                      color: index === 0 || index === 6 ? 'error.main' : 'text.secondary',
+                      p: 1,
+                    }}
+                  >
+                    {day}
                   </Typography>
-                </Box>
-                
-                {/* Day headers */}
-                <Box sx={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(7, 1fr)',
-                  gap: 1,
-                  textAlign: 'center',
-                  mb: 2
-                }}>
-                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
-                    <Typography 
-                      key={day} 
-                      variant="body2" 
+                ))}
+              </Box>
+              
+              {/* Calendar days */}
+              <Box sx={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(7, 1fr)',
+                gap: 1,
+                textAlign: 'center'
+              }}>
+                {calendarDays.map((day, index) => {
+                  if (day === null) {
+                    return <Box key={`empty-${index}`} sx={{ p: 2 }} />;
+                  }
+                  
+                  const dayOfWeek = new Date(
+                    currentTime.getFullYear(),
+                    currentTime.getMonth(),
+                    day
+                  ).getDay();
+                  
+                  const isToday = day === currentTime.getDate() && 
+                                currentTime.getMonth() === new Date().getMonth() && 
+                                currentTime.getFullYear() === new Date().getFullYear();
+                  
+                  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                  
+                  return (
+                    <Box
+                      key={`day-${day}`}
                       sx={{
-                        fontWeight: 'bold',
-                        color: index === 0 || index === 6 ? 'error.main' : 'text.secondary',
-                        p: 1,
+                        p: 1.5,
+                        borderRadius: '50%',
+                        bgcolor: isToday ? 'primary.main' : 'transparent',
+                        color: isToday ? 'common.white' : 
+                              isWeekend ? 'error.main' : 'text.primary',
+                        fontWeight: isToday ? 'bold' : 'medium',
+                        cursor: 'pointer',
+                        position: 'relative',
+                        '&:hover': {
+                          bgcolor: isToday ? 'primary.dark' : 'action.hover',
+                        },
+                        '&:after': isToday ? {
+                          content: '""',
+                          position: 'absolute',
+                          bottom: 4,
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          width: 6,
+                          height: 6,
+                          borderRadius: '50%',
+                          bgcolor: 'common.white',
+                        } : {}
                       }}
                     >
                       {day}
-                    </Typography>
-                  ))}
-                </Box>
-                
-                {/* Calendar days */}
-                <Box sx={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(7, 1fr)',
-                  gap: 1,
-                  textAlign: 'center'
-                }}>
-                  {calendarDays.map((day, index) => {
-                    if (day === null) {
-                      return <Box key={`empty-${index}`} sx={{ p: 2 }} />;
-                    }
-                    
-                    const dayOfWeek = new Date(
-                      currentTime.getFullYear(),
-                      currentTime.getMonth(),
-                      day
-                    ).getDay();
-                    
-                    const isToday = day === currentTime.getDate() && 
-                                  currentTime.getMonth() === new Date().getMonth() && 
-                                  currentTime.getFullYear() === new Date().getFullYear();
-                    
-                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-                    
-                    return (
-                      <Box
-                        key={`day-${day}`}
-                        sx={{
-                          p: 1.5,
-                          borderRadius: '50%',
-                          bgcolor: isToday ? 'primary.main' : 'transparent',
-                          color: isToday ? 'common.white' : 
-                                isWeekend ? 'error.main' : 'text.primary',
-                          fontWeight: isToday ? 'bold' : 'medium',
-                          cursor: 'pointer',
-                          position: 'relative',
-                          '&:hover': {
-                            bgcolor: isToday ? 'primary.dark' : 'action.hover',
-                          },
-                          '&:after': isToday ? {
-                            content: '""',
-                            position: 'absolute',
-                            bottom: 4,
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            width: 6,
-                            height: 6,
-                            borderRadius: '50%',
-                            bgcolor: 'common.white',
-                          } : {}
-                        }}
-                      >
-                        {day}
-                      </Box>
-                    );
-                  })}
-                </Box>
-                
-                {/* Calendar footer */}
-                <Box sx={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  mt: 'auto',
-                  pt: 2,
-                  borderTop: '1px solid',
-                  borderColor: 'divider'
-                }}>
-                  <Typography variant="body2" color="text.secondary">
-                    {currentTime.toLocaleDateString([], { weekday: 'long' })}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {currentTime.getDate()} {currentTime.toLocaleDateString([], { month: 'short' })}
-                  </Typography>
-                </Box>
-              </Paper>
-            </Grid>
+                    </Box>
+                  );
+                })}
+              </Box>
+              
+              {/* Calendar footer */}
+              <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                mt: 'auto',
+                pt: 2,
+                borderTop: '1px solid',
+                borderColor: 'divider'
+              }}>
+                <Typography variant="body2" color="text.secondary">
+                  {currentTime.toLocaleDateString([], { weekday: 'long' })}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {currentTime.getDate()} {currentTime.toLocaleDateString([], { month: 'short' })}
+                </Typography>
+              </Box>
+            </Paper>
           </Grid>
-        </Box>
+        </Grid>
       </motion.div>
     </Box>
   );
