@@ -25,6 +25,15 @@ const AdminDashboard = () => {
         const element = document.getElementById(location.hash.substring(1));
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          console.log(`Element with id ${location.hash.substring(1)} not found`);
+          // Try again with a longer delay if element not found
+          setTimeout(() => {
+            const retryElement = document.getElementById(location.hash.substring(1));
+            if (retryElement) {
+              retryElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 500);
         }
       }, 300);
     }

@@ -107,7 +107,20 @@ const DashboardOverview = () => {
   }
 
   return (
-    <Box sx={{ p: { xs: 2, sm: 3 } }}>
+    <Box id="dashboard" sx={{ p: { xs: 2, sm: 3 }, scrollMarginTop: '80px' }}>
+      <Typography 
+        variant="h5" 
+        sx={{ 
+          fontWeight: 600, 
+          color: '#1a237e', 
+          mb: 3,
+          borderLeft: '4px solid #1a237e',
+          pl: 2,
+          py: 1
+        }}
+      >
+        Dashboard Overview
+      </Typography>
       <Grid container spacing={3}>
         {statCards.map((card, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>

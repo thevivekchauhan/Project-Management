@@ -79,17 +79,22 @@ const AdminLayout = ({ children }) => {
 
   const handleMenuClick = (path) => {
     if (path.startsWith('#')) {
-      const element = document.getElementById(path.substring(1));
+      // For hash navigation
+      const targetId = path.substring(1);
+      const element = document.getElementById(targetId);
+      
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } else {
         // If element not found immediately, wait for it to render
         setTimeout(() => {
-          const delayedElement = document.getElementById(path.substring(1));
+          const delayedElement = document.getElementById(targetId);
           if (delayedElement) {
             delayedElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else {
+            console.log(`Element with id ${targetId} not found after delay`);
           }
-        }, 100);
+        }, 300);
       }
     } else {
       navigate(path);
