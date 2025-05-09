@@ -41,6 +41,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { projectApi, userApi } from '../../../services/api';
+import ProjectCharts from './ProjectCharts';
 
 const ProjectsSection = () => {
   const [projects, setProjects] = useState([]);
@@ -129,7 +130,12 @@ const ProjectsSection = () => {
     try {
       setLoading(true);
       await projectApi.deleteProject(deleteProject._id);
-      await fetchProjects();
+      
+      // Remove the deleted project from local state
+      setProjects(prevProjects => 
+        prevProjects.filter(project => project._id !== deleteProject._id)
+      );
+      
       setDeleteProject(null);
       setSnackbar({
         open: true,
@@ -152,7 +158,14 @@ const ProjectsSection = () => {
     try {
       setLoading(true);
       await projectApi.updateProject(editProject._id, editProject);
-      await fetchProjects();
+      
+      // Update the project in the local state to immediately reflect changes in UI
+      setProjects(prevProjects => 
+        prevProjects.map(project => 
+          project._id === editProject._id ? editProject : project
+        )
+      );
+      
       setEditProject(null);
       setSnackbar({
         open: true,
@@ -249,12 +262,17 @@ const ProjectsSection = () => {
           startIcon={<AddIcon />}
           onClick={handleNewProject}
           sx={{
-            background: 'linear-gradient(45deg, #4CAF50 30%, #81C784 90%)',
-            boxShadow: '0 3px 5px 2px rgba(76, 175, 80, .3)',
+            bgcolor: '#1a237e',
+            '&:hover': { bgcolor: '#0d1642' },
           }}
         >
           New Project
         </Button>
+      </Box>
+
+      {/* Add Project Charts */}
+      <Box sx={{ mb: 4 }}>
+        <ProjectCharts projects={projects} />
       </Box>
 
       {loading && <LinearProgress sx={{ mb: 2 }} />}

@@ -3,7 +3,6 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import AdminLayout from './admin/AdminLayout';
 import DashboardOverview from './admin/DashboardOverview';
 import ProjectsSection from './admin/ProjectsSection';
-import TasksSection from './admin/TasksSection';
 import CollaborationPage from './admin/CollaborationPage';
 import AdminProfile from './admin/AdminProfile';
 import AdminProfileEdit from './admin/AdminProfileEdit';
@@ -32,7 +31,6 @@ const AdminDashboard = () => {
     <>
       <DashboardOverview />
       <ProjectsSection />
-      <TasksSection projects={projects} />
     </>
   );
 
