@@ -382,8 +382,18 @@ const ProjectsSection = () => {
       </TableContainer>
 
       {/* Project Charts */}
-      <Box>
-        <Typography variant="h6" sx={{ fontWeight: 600, color: '#1a237e', mb: 2 }}>
+      <Box id="activity" sx={{ mt: 6, pt: 2, scrollMarginTop: '80px' }}>
+        <Typography 
+          variant="h5" 
+          sx={{ 
+            fontWeight: 600, 
+            color: '#1a237e', 
+            mb: 3,
+            borderLeft: '4px solid #1a237e',
+            pl: 2,
+            py: 1
+          }}
+        >
           Project Analytics
         </Typography>
         <ProjectCharts projects={projects} />

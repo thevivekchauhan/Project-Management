@@ -3,6 +3,7 @@ import { Box, Card, Typography, ToggleButton, ToggleButtonGroup, useMediaQuery, 
 import { PieChart, ShowChart } from '@mui/icons-material';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title } from 'chart.js';
 import { Pie, Line } from 'react-chartjs-2';
+import { motion } from 'framer-motion';
 
 ChartJS.register(
   ArcElement,
@@ -187,86 +188,98 @@ const ProjectCharts = ({ projects }) => {
     <Grid container spacing={3}>
       {/* Project Status Chart (Pie Chart) */}
       <Grid item xs={12} md={6}>
-        <Card
-          sx={{
-            p: { xs: 2, sm: 3 },
-            height: '100%',
-            minHeight: { xs: 350, sm: 400 },
-            display: 'flex',
-            flexDirection: 'column',
-            borderRadius: { xs: 1, sm: 2 },
-            boxShadow: '0 4px 20px 0 rgba(0,0,0,0.1)',
-          }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <Typography
-            variant={isMobile ? "h6" : "h5"}
+          <Card
             sx={{
-              fontWeight: 600,
-              color: '#1a237e',
-              mb: { xs: 2, sm: 3 },
-              fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.4rem' }
+              p: { xs: 2, sm: 3 },
+              height: '100%',
+              minHeight: { xs: 350, sm: 400 },
+              display: 'flex',
+              flexDirection: 'column',
+              borderRadius: { xs: 1, sm: 2 },
+              boxShadow: '0 4px 20px 0 rgba(0,0,0,0.1)',
             }}
           >
-            Project Status Distribution
-          </Typography>
+            <Typography
+              variant={isMobile ? "h6" : "h5"}
+              sx={{
+                fontWeight: 600,
+                color: '#1a237e',
+                mb: { xs: 2, sm: 3 },
+                fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.4rem' }
+              }}
+            >
+              Project Status Distribution
+            </Typography>
 
-          <Box sx={{ 
-            flexGrow: 1, 
-            height: { xs: '280px', sm: '320px' },
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative'
-          }}>
-            {!projects || projects.length === 0 ? (
-              <Typography color="text.secondary">No projects available</Typography>
-            ) : (
-              <Pie data={chartData.statusData} options={pieOptions} />
-            )}
-          </Box>
-        </Card>
+            <Box sx={{ 
+              flexGrow: 1, 
+              height: { xs: '280px', sm: '320px' },
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}>
+              {!projects || projects.length === 0 ? (
+                <Typography color="text.secondary">No projects available</Typography>
+              ) : (
+                <Pie data={chartData.statusData} options={pieOptions} />
+              )}
+            </Box>
+          </Card>
+        </motion.div>
       </Grid>
 
       {/* Project Progress Chart (Line Chart) */}
       <Grid item xs={12} md={6}>
-        <Card
-          sx={{
-            p: { xs: 2, sm: 3 },
-            height: '100%',
-            minHeight: { xs: 350, sm: 400 },
-            display: 'flex',
-            flexDirection: 'column',
-            borderRadius: { xs: 1, sm: 2 },
-            boxShadow: '0 4px 20px 0 rgba(0,0,0,0.1)',
-          }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Typography
-            variant={isMobile ? "h6" : "h5"}
+          <Card
             sx={{
-              fontWeight: 600,
-              color: '#1a237e',
-              mb: { xs: 2, sm: 3 },
-              fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.4rem' }
+              p: { xs: 2, sm: 3 },
+              height: '100%',
+              minHeight: { xs: 350, sm: 400 },
+              display: 'flex',
+              flexDirection: 'column',
+              borderRadius: { xs: 1, sm: 2 },
+              boxShadow: '0 4px 20px 0 rgba(0,0,0,0.1)',
             }}
           >
-            Project Progress
-          </Typography>
+            <Typography
+              variant={isMobile ? "h6" : "h5"}
+              sx={{
+                fontWeight: 600,
+                color: '#1a237e',
+                mb: { xs: 2, sm: 3 },
+                fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.4rem' }
+              }}
+            >
+              Project Progress
+            </Typography>
 
-          <Box sx={{ 
-            flexGrow: 1, 
-            height: { xs: '280px', sm: '320px' },
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative'
-          }}>
-            {!projects || projects.length === 0 ? (
-              <Typography color="text.secondary">No projects available</Typography>
-            ) : (
-              <Line data={chartData.progressData} options={lineOptions} />
-            )}
-          </Box>
-        </Card>
+            <Box sx={{ 
+              flexGrow: 1, 
+              height: { xs: '280px', sm: '320px' },
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}>
+              {!projects || projects.length === 0 ? (
+                <Typography color="text.secondary">No projects available</Typography>
+              ) : (
+                <Line data={chartData.progressData} options={lineOptions} />
+              )}
+            </Box>
+          </Card>
+        </motion.div>
       </Grid>
     </Grid>
   );

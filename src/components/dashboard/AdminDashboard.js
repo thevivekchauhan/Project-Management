@@ -20,10 +20,13 @@ const AdminDashboard = () => {
   useEffect(() => {
     // Handle hash navigation when the component mounts or location changes
     if (location.hash) {
-      const element = document.getElementById(location.hash.substring(1));
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      // Wait for components to fully render before scrolling
+      setTimeout(() => {
+        const element = document.getElementById(location.hash.substring(1));
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
     }
   }, [location]);
 

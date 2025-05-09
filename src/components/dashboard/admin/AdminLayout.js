@@ -82,6 +82,14 @@ const AdminLayout = ({ children }) => {
       const element = document.getElementById(path.substring(1));
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        // If element not found immediately, wait for it to render
+        setTimeout(() => {
+          const delayedElement = document.getElementById(path.substring(1));
+          if (delayedElement) {
+            delayedElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 100);
       }
     } else {
       navigate(path);
