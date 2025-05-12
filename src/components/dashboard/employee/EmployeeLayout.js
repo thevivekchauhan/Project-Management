@@ -27,7 +27,6 @@ import {
   ChevronLeft as ChevronLeftIcon,
   Dashboard as DashboardIcon,
   Assignment as AssignmentIcon,
-  Message as MessageIcon,
   Settings as SettingsIcon,
   Notifications as NotificationsIcon,
   AccountCircle as AccountCircleIcon,
@@ -37,7 +36,6 @@ import { styled } from '@mui/material/styles';
 import { logout } from '../../../store/authSlice';
 import Dashboard from './Dashboard';
 import Projects from './Projects';
-import Messages from './Messages';
 import Settings from './Settings';
 
 const drawerWidth = {
@@ -134,7 +132,6 @@ const EmployeeLayout = () => {
   const menuItems = [
     { text: 'Home', icon: <DashboardIcon />, path: '/employee' },
     { text: 'My Projects', icon: <AssignmentIcon />, path: '/employee/projects' },
-    { text: 'Messages', icon: <MessageIcon />, path: '/employee/messages' },
     { text: 'Settings', icon: <SettingsIcon />, path: '/employee/settings' },
   ];
 
@@ -360,7 +357,6 @@ const EmployeeLayout = () => {
         }}>
           {location.pathname === '/employee' && <Dashboard />}
           {location.pathname === '/employee/projects' && <Projects />}
-          {location.pathname === '/employee/messages' && <Messages />}
           {location.pathname === '/employee/settings' && <Settings />}
         </Box>
       </Main>
