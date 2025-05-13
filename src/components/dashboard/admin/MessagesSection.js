@@ -36,7 +36,7 @@ const MessagesSection = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [message, setMessage] = useState('');
   const [employees, setEmployees] = useState([]);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState({});
 
   useEffect(() => {
     fetchEmployees();
@@ -46,7 +46,7 @@ const MessagesSection = () => {
     try {
       const response = await userApi.getAllUsers();
       if (response.success && response.users) {
-        setEmployees(response.users.map(user => ({
+        const employeeList = response.users.map(user => ({
           id: user._id,
           name: user.name,
           avatar: user.name.charAt(0),
@@ -55,7 +55,13 @@ const MessagesSection = () => {
           time: '',
           unread: 0,
           online: true,
-        })));
+        }));
+        setEmployees(employeeList);
+        const initialMessages = {};
+        employeeList.forEach(emp => {
+          initialMessages[emp.id] = [];
+        });
+        setMessages(initialMessages);
       }
     } catch (error) {
       console.error('Error fetching employees:', error);
@@ -65,14 +71,19 @@ const MessagesSection = () => {
   const handleSendMessage = () => {
     if (message.trim() && selectedChat) {
       const newMessage = {
-        id: messages.length + 1,
+        id: Date.now(),
         sender: 'You',
         avatar: 'A',
         message: message.trim(),
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         isOwn: true,
       };
-      setMessages([...messages, newMessage]);
+      
+      setMessages(prev => ({
+        ...prev,
+        [selectedChat.id]: [...(prev[selectedChat.id] || []), newMessage]
+      }));
+      
       setMessage('');
     }
   };
@@ -204,7 +215,7 @@ const MessagesSection = () => {
               bgcolor: 'background.default',
             }}
           >
-            {messages.map((msg) => (
+            {messages[selectedChat.id]?.map((msg) => (
               <Box
                 key={msg.id}
                 sx={{
