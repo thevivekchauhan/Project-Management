@@ -10,6 +10,10 @@ import AdminDashboard from './components/dashboard/AdminDashboard';
 import EmployeeDashboard from './components/dashboard/EmployeeDashboard';
 import ProtectedRoute from './components/shared/ProtectedRoute';
 import CollaborationPage from './components/dashboard/admin/CollaborationPage';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { loadUser } from './store/authSlice';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -55,6 +59,12 @@ const theme = createTheme({
 });
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUser());
+  }, [dispatch]);
+
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>

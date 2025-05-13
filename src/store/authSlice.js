@@ -41,6 +41,22 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
+export const loadUser = createAsyncThunk(
+  'auth/loadUser',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return rejectWithValue('No token found');
+      }
+      const response = await userApi.getUserById('me');
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to load user');
+    }
+  }
+);
+
 const initialState = {
   user: null,
   token: localStorage.getItem('token'),
@@ -66,6 +82,22 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Load user cases
+      .addCase(loadUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loadUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload;
+      })
+      .addCase(loadUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.user = null;
+        state.isAuthenticated = false;
+      })
       // Register cases
       .addCase(register.pending, (state) => {
         state.loading = true;

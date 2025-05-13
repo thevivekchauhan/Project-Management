@@ -264,4 +264,58 @@ export const userApi = {
   }
 };
 
+export const chatApi = {
+  getMessages: async () => {
+    try {
+      console.log('Fetching all messages...');
+      const response = await api.get('/messages');
+      console.log('Messages response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching messages:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+
+  sendMessage: async (messageData) => {
+    try {
+      console.log('Sending message:', messageData);
+      const response = await api.post('/messages', {
+        sender: messageData.sender,
+        receiver: messageData.receiver,
+        content: messageData.content
+      });
+      console.log('Message sent successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error sending message:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+
+  getMessagesByUser: async (userId) => {
+    try {
+      console.log('Fetching messages for user:', userId);
+      const response = await api.get(`/messages/user/${userId}`);
+      console.log('User messages response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user messages:', error.response?.data || error.message);
+      throw error;
+    }
+  },
+
+  deleteMessage: async (messageId) => {
+    try {
+      console.log('Deleting message:', messageId);
+      const response = await api.delete(`/messages/${messageId}`);
+      console.log('Message deleted successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting message:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+};
+
 export default api;

@@ -18,6 +18,8 @@ import {
   useTheme,
   useMediaQuery,
   Button,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import {
   Send as SendIcon,
@@ -26,66 +28,205 @@ import {
   AttachFile as AttachFileIcon,
   EmojiEmotions as EmojiIcon,
 } from '@mui/icons-material';
-import { userApi } from '../../../services/api';
+import { userApi, chatApi } from '../../../services/api.js';
+import { useSelector } from 'react-redux';
 
 const MessagesSection = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const { user } = useSelector((state) => state.auth);
 
   const [selectedChat, setSelectedChat] = useState(null);
   const [message, setMessage] = useState('');
   const [employees, setEmployees] = useState([]);
   const [messages, setMessages] = useState({});
+  const [notification, setNotification] = useState({ open: false, message: '', severity: 'success' });
 
   useEffect(() => {
+    console.log('Current user:', user); // Debug log
+    if (!user) {
+      setNotification({
+        open: true,
+        message: 'Please log in to continue',
+        severity: 'error'
+      });
+      return;
+    }
     fetchEmployees();
-  }, []);
+    if (selectedChat) {
+      fetchMessages(selectedChat.id);
+    }
+  }, [selectedChat, user]);
+
+  const fetchMessages = async (userId) => {
+    try {
+      const response = await chatApi.getMessagesByUser(userId);
+      if (response.success && response.data) {
+        const formattedMessages = response.data.map(msg => ({
+          id: msg._id,
+          sender: msg.sender._id === user._id ? 'You' : msg.sender.name,
+          avatar: msg.sender._id === user._id ? user.name.charAt(0) : msg.sender.name.charAt(0),
+          message: msg.content,
+          time: new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          isOwn: msg.sender._id === user._id,
+        }));
+        
+        setMessages(prev => ({
+          ...prev,
+          [userId]: formattedMessages
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      setNotification({
+        open: true,
+        message: 'Failed to fetch messages',
+        severity: 'error'
+      });
+    }
+  };
 
   const fetchEmployees = async () => {
     try {
       const response = await userApi.getAllUsers();
       if (response.success && response.users) {
-        const employeeList = response.users.map(user => ({
-          id: user._id,
-          name: user.name,
-          avatar: user.name.charAt(0),
-          role: user.role,
-          lastMessage: '',
-          time: '',
-          unread: 0,
-          online: true,
-        }));
+        const employeeList = response.users
+          .filter(user => user.role === 'employee')
+          .map(user => ({
+            id: user._id,
+            name: user.name,
+            avatar: user.name.charAt(0),
+            role: user.role,
+            lastMessage: '',
+            time: '',
+            unread: 0,
+            online: true,
+          }));
         setEmployees(employeeList);
-        const initialMessages = {};
-        employeeList.forEach(emp => {
-          initialMessages[emp.id] = [];
-        });
-        setMessages(initialMessages);
       }
     } catch (error) {
       console.error('Error fetching employees:', error);
+      setNotification({
+        open: true,
+        message: 'Failed to fetch employees',
+        severity: 'error'
+      });
     }
   };
 
-  const handleSendMessage = () => {
-    if (message.trim() && selectedChat) {
-      const newMessage = {
-        id: Date.now(),
-        sender: 'You',
-        avatar: 'A',
-        message: message.trim(),
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isOwn: true,
-      };
-      
-      setMessages(prev => ({
-        ...prev,
-        [selectedChat.id]: [...(prev[selectedChat.id] || []), newMessage]
-      }));
-      
-      setMessage('');
+  const handleSendMessage = async () => {
+    // Debug log for user state
+    console.log('Current user state:', user);
+
+    if (!user || !user.id) {
+      console.error('User not authenticated or missing ID:', user);
+      setNotification({
+        open: true,
+        message: 'Please log in to continue',
+        severity: 'error'
+      });
+      return;
     }
+
+    if (!selectedChat || !selectedChat.id) {
+      console.error('No chat selected or missing chat ID:', selectedChat);
+      setNotification({
+        open: true,
+        message: 'Please select a chat to send message',
+        severity: 'error'
+      });
+      return;
+    }
+
+    if (!message.trim()) {
+      setNotification({
+        open: true,
+        message: 'Message cannot be empty',
+        severity: 'error'
+      });
+      return;
+    }
+
+    try {
+      const messageData = {
+        sender: user.id,
+        receiver: selectedChat.id,
+        content: message.trim()
+      };
+
+      // Debug log for message data
+      console.log('Preparing to send message with data:', messageData);
+
+      // Validate all required fields
+      if (!messageData.sender || !messageData.receiver || !messageData.content) {
+        console.error('Missing required fields:', {
+          sender: messageData.sender,
+          receiver: messageData.receiver,
+          content: messageData.content
+        });
+        setNotification({
+          open: true,
+          message: 'Missing required fields for message',
+          severity: 'error'
+        });
+        return;
+      }
+
+      const response = await chatApi.sendMessage(messageData);
+      console.log('Message response:', response);
+
+      if (response.success && response.data) {
+        const newMessage = {
+          id: response.data._id,
+          sender: 'You',
+          avatar: `${user.firstName} ${user.lastName}`.charAt(0),
+          message: message.trim(),
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          isOwn: true,
+        };
+        
+        setMessages(prev => ({
+          ...prev,
+          [selectedChat.id]: [...(prev[selectedChat.id] || []), newMessage]
+        }));
+        
+        setMessage('');
+        setNotification({
+          open: true,
+          message: 'Message sent successfully',
+          severity: 'success'
+        });
+      } else {
+        throw new Error(response.message || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to send message';
+      const requiredFields = error.response?.data?.required;
+      
+      if (requiredFields) {
+        const missingFields = Object.entries(requiredFields)
+          .filter(([_, missing]) => missing)
+          .map(([field]) => field)
+          .join(', ');
+        setNotification({
+          open: true,
+          message: `Missing required fields: ${missingFields}`,
+          severity: 'error'
+        });
+      } else {
+        setNotification({
+          open: true,
+          message: errorMessage,
+          severity: 'error'
+        });
+      }
+    }
+  };
+
+  const handleCloseNotification = () => {
+    setNotification(prev => ({ ...prev, open: false }));
   };
 
   const ChatList = () => (
@@ -355,6 +496,21 @@ const MessagesSection = () => {
           </Grid>
         </Grid>
       </motion.div>
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          sx={{ width: '100%' }}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
