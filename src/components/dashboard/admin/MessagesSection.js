@@ -61,17 +61,24 @@ const MessagesSection = () => {
 
   const fetchMessages = async (userId) => {
     try {
+      console.log('Fetching messages for user:', userId);
       const response = await chatApi.getMessagesByUser(userId);
+      console.log('Messages response:', response);
+      
       if (response.success && response.data) {
-        const formattedMessages = response.data.map(msg => ({
-          id: msg._id,
-          sender: msg.sender._id === user._id ? 'You' : msg.sender.name,
-          avatar: msg.sender._id === user._id ? user.name.charAt(0) : msg.sender.name.charAt(0),
-          message: msg.content,
-          time: new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          isOwn: msg.sender._id === user._id,
-        }));
+        const formattedMessages = response.data.map(msg => {
+          const isOwn = msg.sender.id === user.id;  // Changed from _id to id
+          return {
+            id: msg._id,
+            sender: isOwn ? 'You' : `${msg.sender.firstName} ${msg.sender.lastName}`,
+            avatar: isOwn ? `${user.firstName} ${user.lastName}`.charAt(0) : `${msg.sender.firstName} ${msg.sender.lastName}`.charAt(0),
+            message: msg.content,
+            time: new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            isOwn: isOwn,
+          };
+        });
         
+        console.log('Formatted messages:', formattedMessages);
         setMessages(prev => ({
           ...prev,
           [userId]: formattedMessages
