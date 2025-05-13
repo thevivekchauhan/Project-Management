@@ -31,12 +31,14 @@ import {
   Notifications as NotificationsIcon,
   AccountCircle as AccountCircleIcon,
   Logout as LogoutIcon,
+  Message as MessageIcon,
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { logout } from '../../../store/authSlice';
 import Dashboard from './Dashboard';
 import Projects from './Projects';
 import Settings from './Settings';
+import Messages from './Messages';
 
 const drawerWidth = {
   xs: '100%',
@@ -132,6 +134,7 @@ const EmployeeLayout = () => {
   const menuItems = [
     { text: 'Home', icon: <DashboardIcon />, path: '/employee' },
     { text: 'My Projects', icon: <AssignmentIcon />, path: '/employee/projects' },
+    { text: 'Messages', icon: <MessageIcon />, path: '/employee/messages' },
     { text: 'Settings', icon: <SettingsIcon />, path: '/employee/settings' },
   ];
 
@@ -357,6 +360,7 @@ const EmployeeLayout = () => {
         }}>
           {location.pathname === '/employee' && <Dashboard />}
           {location.pathname === '/employee/projects' && <Projects />}
+          {location.pathname === '/employee/messages' && <Messages />}
           {location.pathname === '/employee/settings' && <Settings />}
         </Box>
       </Main>

@@ -6,6 +6,7 @@ import ProjectsSection from './admin/ProjectsSection';
 import CollaborationPage from './admin/CollaborationPage';
 import AdminProfile from './admin/AdminProfile';
 import AdminProfileEdit from './admin/AdminProfileEdit';
+import MessagesSection from './admin/MessagesSection';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -52,6 +53,7 @@ const AdminDashboard = () => {
         <Route path="collaboration" element={<CollaborationPage />} />
         <Route path="profile" element={<AdminProfile />} />
         <Route path="profile/edit" element={<AdminProfileEdit />} />
+        <Route path="messages" element={<MessagesSection />} />
         <Route path="*" element={<MainContent />} />
       </Routes>
     </AdminLayout>

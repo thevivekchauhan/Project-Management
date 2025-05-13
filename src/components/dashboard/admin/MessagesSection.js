@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Box,
-  Paper,
   Typography,
+  Paper,
   Grid,
   TextField,
   IconButton,
@@ -28,31 +28,29 @@ import {
 } from '@mui/icons-material';
 import { userApi } from '../../../services/api';
 
-const Messages = () => {
+const MessagesSection = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   const [selectedChat, setSelectedChat] = useState(null);
   const [message, setMessage] = useState('');
-  const [admins, setAdmins] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    fetchAdmins();
+    fetchEmployees();
   }, []);
 
-  const fetchAdmins = async () => {
+  const fetchEmployees = async () => {
     try {
       const response = await userApi.getAllUsers();
       if (response.success && response.users) {
-        // Filter only admin users
-        const adminUsers = response.users.filter(user => user.role === 'admin');
-        setAdmins(adminUsers.map(admin => ({
-          id: admin._id,
-          name: admin.name,
-          avatar: admin.name.charAt(0),
-          role: 'Admin',
+        setEmployees(response.users.map(user => ({
+          id: user._id,
+          name: user.name,
+          avatar: user.name.charAt(0),
+          role: user.role,
           lastMessage: '',
           time: '',
           unread: 0,
@@ -60,7 +58,7 @@ const Messages = () => {
         })));
       }
     } catch (error) {
-      console.error('Error fetching admins:', error);
+      console.error('Error fetching employees:', error);
     }
   };
 
@@ -69,7 +67,7 @@ const Messages = () => {
       const newMessage = {
         id: messages.length + 1,
         sender: 'You',
-        avatar: 'E',
+        avatar: 'A',
         message: message.trim(),
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         isOwn: true,
@@ -93,7 +91,7 @@ const Messages = () => {
       <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
         <TextField
           fullWidth
-          placeholder="Search admins..."
+          placeholder="Search employees..."
           variant="outlined"
           size="small"
           InputProps={{
@@ -102,12 +100,12 @@ const Messages = () => {
         />
       </Box>
       <List sx={{ p: 0 }}>
-        {admins.map((admin) => (
+        {employees.map((employee) => (
           <ListItem
-            key={admin.id}
+            key={employee.id}
             button
-            selected={selectedChat?.id === admin.id}
-            onClick={() => setSelectedChat(admin)}
+            selected={selectedChat?.id === employee.id}
+            onClick={() => setSelectedChat(employee)}
             sx={{
               borderBottom: '1px solid',
               borderColor: 'divider',
@@ -121,32 +119,32 @@ const Messages = () => {
                 overlap="circular"
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 variant="dot"
-                color={admin.online ? 'success' : 'default'}
+                color={employee.online ? 'success' : 'default'}
               >
                 <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
-                  {admin.avatar}
+                  {employee.avatar}
                 </Avatar>
               </Badge>
             </ListItemAvatar>
             <ListItemText
-              primary={admin.name}
-              secondary={admin.role}
+              primary={employee.name}
+              secondary={employee.role}
               primaryTypographyProps={{
-                fontWeight: admin.unread ? 'bold' : 'normal',
+                fontWeight: employee.unread ? 'bold' : 'normal',
               }}
               secondaryTypographyProps={{
-                color: admin.unread ? 'text.primary' : 'text.secondary',
+                color: employee.unread ? 'text.primary' : 'text.secondary',
                 noWrap: true,
               }}
             />
             <ListItemSecondaryAction>
               <Box sx={{ textAlign: 'right' }}>
                 <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                  {admin.time}
+                  {employee.time}
                 </Typography>
-                {admin.unread > 0 && (
+                {employee.unread > 0 && (
                   <Badge
-                    badgeContent={admin.unread}
+                    badgeContent={employee.unread}
                     color="primary"
                     sx={{ mt: 0.5 }}
                   />
@@ -307,7 +305,7 @@ const Messages = () => {
           }}
         >
           <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
-            Select an admin to start messaging
+            Select an employee to start messaging
           </Typography>
           <Button
             variant="contained"
@@ -333,7 +331,7 @@ const Messages = () => {
             Messages
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Chat with administrators
+            Chat with your employees
           </Typography>
         </Box>
 
@@ -350,4 +348,4 @@ const Messages = () => {
   );
 };
 
-export default Messages; 
+export default MessagesSection; 
