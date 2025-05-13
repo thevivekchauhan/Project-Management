@@ -67,28 +67,38 @@ const Messages = () => {
       
       if (response.success && response.data) {
         const formattedMessages = response.data.map(msg => {
-          const isOwn = msg.sender.id === user.id;  // Changed from _id to id
+          // Check if sender exists and has the correct structure
+          if (!msg.sender) {
+            console.error('Message missing sender:', msg);
+            return null;
+          }
+
+          const isOwn = msg.sender._id === user._id;  // Changed to use _id instead of id
           return {
             id: msg._id,
-            sender: isOwn ? 'You' : `${msg.sender.firstName} ${msg.sender.lastName}`,
-            avatar: isOwn ? `${user.firstName} ${user.lastName}`.charAt(0) : `${msg.sender.firstName} ${msg.sender.lastName}`.charAt(0),
-            message: msg.content,
+            sender: isOwn ? 'You' : `${msg.sender.firstName || ''} ${msg.sender.lastName || ''}`.trim() || 'Unknown User',
+            avatar: isOwn 
+              ? `${user.firstName || ''} ${user.lastName || ''}`.charAt(0) || 'U'
+              : `${msg.sender.firstName || ''} ${msg.sender.lastName || ''}`.charAt(0) || 'U',
+            message: msg.content || '',
             time: new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             isOwn: isOwn,
           };
-        });
+        }).filter(msg => msg !== null); // Filter out any null messages
         
         console.log('Formatted messages:', formattedMessages);
         setMessages(prev => ({
           ...prev,
           [userId]: formattedMessages
         }));
+      } else {
+        throw new Error(response.message || 'Invalid response format');
       }
     } catch (error) {
       console.error('Error fetching messages:', error);
       setNotification({
         open: true,
-        message: 'Failed to fetch messages',
+        message: error.message || 'Failed to fetch messages',
         severity: 'error'
       });
     }
