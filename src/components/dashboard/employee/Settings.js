@@ -170,16 +170,16 @@ const Settings = () => {
                   {settings.profile.firstName?.charAt(0)}
                 </Avatar>
                 <Box sx={{ ml: 3 }}>
-                  <Button
+                  {/* <Button
                     variant="outlined"
                     startIcon={<PhotoCameraIcon />}
                     sx={{ mb: 1 }}
                   >
                     Change Photo
-                  </Button>
-                  <Typography variant="body2" color="text.secondary">
+                  </Button> */}
+                  {/* <Typography variant="body2" color="text.secondary">
                     JPG, GIF or PNG. Max size of 2MB.
-                  </Typography>
+                  </Typography> */}
                 </Box>
               </Box>
 
