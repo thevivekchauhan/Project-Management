@@ -165,7 +165,7 @@ const AdminLayout = ({ children }) => {
           </motion.div>
         ))}
       </List>
-      <Box sx={{ p: 2, mt: 'auto' }}>
+      {/* <Box sx={{ p: 2, mt: 'auto' }}>
         <Button
           variant="contained"
           startIcon={<GroupAdd />}
@@ -178,7 +178,7 @@ const AdminLayout = ({ children }) => {
         >
           Collaborate
         </Button>
-      </Box>
+      </Box> */}
     </>
   );
 
