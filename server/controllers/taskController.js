@@ -67,23 +67,13 @@ exports.getTaskById = async (req, res) => {
 exports.updateTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
-    
     if (!task) {
-      return res.status(404).json({
-        success: false,
-        message: 'Task not found'
-      });
+      return res.status(404).json({ message: 'Task not found' });
     }
 
-    // Store old values for activity log
-    const previousValues = task.toObject();
-
-    // Update task
-    const updatedTask = await Task.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
+    const oldTask = { ...task.toObject() };
+    Object.assign(task, req.body);
+    await task.save();
 
     // Log activity
     await logActivity(
@@ -94,14 +84,14 @@ exports.updateTask = async (req, res) => {
       task._id,
       `Updated task: ${task.title}`,
       {
-        before: previousValues,
-        after: req.body
+        before: oldTask,
+        after: task.toObject()
       }
     );
 
     res.json({
       success: true,
-      data: updatedTask
+      data: task
     });
   } catch (error) {
     res.status(500).json({
@@ -116,17 +106,11 @@ exports.updateTask = async (req, res) => {
 exports.deleteTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
-
     if (!task) {
-      return res.status(404).json({
-        success: false,
-        message: 'Task not found'
-      });
+      return res.status(404).json({ message: 'Task not found' });
     }
 
-    await task.remove();
-
-    // Log activity
+    // Log activity before deleting
     await logActivity(
       req,
       req.user,
@@ -137,9 +121,11 @@ exports.deleteTask = async (req, res) => {
       { before: task.toObject() }
     );
 
+    await task.deleteOne();
+
     res.json({
       success: true,
-      data: {}
+      message: 'Task deleted successfully'
     });
   } catch (error) {
     res.status(500).json({

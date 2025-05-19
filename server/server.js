@@ -8,6 +8,7 @@ const taskRoutes = require('./route/taskRoutes');
 const recentTaskRoutes = require('./route/recentTaskRoutes');
 const userRoutes = require('./route/userRoutes');
 const chatRoutes = require('./route/chatRoutes');
+const activityRoutes = require('./route/activityRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -43,6 +44,7 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/recent-tasks', recentTaskRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/messages', chatRoutes);
+app.use('/api/activities', activityRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -36,6 +36,7 @@ import {
   Person,
   Edit,
   Message as MessageIcon,
+  History as HistoryIcon,
 } from '@mui/icons-material';
 import { logout } from '../../../store/authSlice';
 import NotificationsPanel from './NotificationsPanel';
@@ -57,6 +58,7 @@ const AdminLayout = ({ children }) => {
     { text: 'Projects', icon: <FolderSpecial />, path: '#projects' },
     { text: 'Messages', icon: <MessageIcon />, path: '/admin/messages' },
     { text: 'Analytics', icon: <Timeline />, path: '#activity' },
+    { text: 'Activities', icon: <HistoryIcon />, path: '/admin/activities' },
     // { text: 'Team', icon: <People />, path: '/admin/team' },
     // { text: 'Settings', icon: <Settings />, path: '/admin/settings' },
   ];
@@ -105,10 +107,6 @@ const AdminLayout = ({ children }) => {
     }
   };
 
-  const handleCollaboration = () => {
-    // Implement collaboration dialog or navigation
-    navigate('/admin/collaboration');
-  };
 
   const handleViewProfile = () => {
     navigate('/admin/profile');
@@ -164,21 +162,7 @@ const AdminLayout = ({ children }) => {
             </ListItem>
           </motion.div>
         ))}
-      </List>
-      {/* <Box sx={{ p: 2, mt: 'auto' }}>
-        <Button
-          variant="contained"
-          startIcon={<GroupAdd />}
-          onClick={handleCollaboration}
-          fullWidth
-          sx={{
-            background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-            boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
-          }}
-        >
-          Collaborate
-        </Button>
-      </Box> */}
+      </List>        
     </>
   );
 

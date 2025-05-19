@@ -14,7 +14,7 @@ const activitySchema = new mongoose.Schema({
   entityType: {
     type: String,
     required: true,
-    enum: ['task', 'project', 'user', 'profile']
+    enum: ['task', 'project', 'user', 'comment']
   },
   entityId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -25,8 +25,12 @@ const activitySchema = new mongoose.Schema({
     required: true
   },
   changes: {
-    before: Object,
-    after: Object
+    before: {
+      type: mongoose.Schema.Types.Mixed
+    },
+    after: {
+      type: mongoose.Schema.Types.Mixed
+    }
   },
   companyId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -37,4 +41,11 @@ const activitySchema = new mongoose.Schema({
   timestamps: true
 });
 
-module.exports = mongoose.model('Activity', activitySchema);
+// Index for faster queries
+activitySchema.index({ createdAt: -1 });
+activitySchema.index({ user: 1, createdAt: -1 });
+activitySchema.index({ entityType: 1, entityId: 1, createdAt: -1 });
+
+const Activity = mongoose.model('Activity', activitySchema);
+
+module.exports = Activity;

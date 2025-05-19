@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const activityController = require('../controllers/activityController');
-const authMiddleware = require('../middleware/authMiddleware');
+const auth = require('../middleware/auth');
 
 // Protect all routes
-router.use(authMiddleware);
+router.use(auth);
 
 // Get recent activities (paginated)
 router.get('/recent', activityController.getRecentActivities);
